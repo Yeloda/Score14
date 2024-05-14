@@ -1,0 +1,5 @@
+/.env
+/android
+/ios
+/node_modules
+/yarn.lock
