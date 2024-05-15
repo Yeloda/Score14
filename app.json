@@ -2,7 +2,7 @@
   "expo": {
     "name": "Score14",
     "slug": "score14",
-    "icon": "./assets/logo_sans_bg.png",
+    "icon": "./assets/logo_3.png",
     "version": "1.0.0",
     "orientation": "portrait",
     "splash": {
@@ -16,14 +16,19 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yeloda.score14",
-      "buildNumber": "16"
+      "buildNumber": "1"
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 19
+      "versionCode": 2
     },
     "runtimeVersion": {
       "policy": "appVersion"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "59844a20-c33a-433a-b5a5-c93cda84e6eb"
+      }
     }
   }
 }

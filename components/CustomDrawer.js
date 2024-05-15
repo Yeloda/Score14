@@ -16,8 +16,8 @@ const CustomDrawer = props => {
                     style={{padding: 20}}
                 >
                     <Image
-                        source={require('../assets/logo_score14.png')}
-                        style={{height: 100, width: 100, borderRadius: 40, marginBottom: 10,alignSelf:'center',}}
+                        source={require('../assets/logo_3.png')}
+                        style={{height: 100, width: 100, borderRadius: 10, marginBottom: 10,alignSelf:'center',}}
                     />
 
                     <Text style={{color: '#fff',fontSize: 18,marginBottom: 5,}}>Score14</Text>
@@ -27,7 +27,7 @@ const CustomDrawer = props => {
                     </View>
                 </ImageBackground>
 
-                <View style={{flex: 1, backgroundColor: '#212B46', paddingTop: 10}}>
+                <View style={{flex: 1, backgroundColor: '#333333', paddingTop: 10}}>
                     <DrawerItemList {...props}/>
                 </View>
             </DrawerContentScrollView>

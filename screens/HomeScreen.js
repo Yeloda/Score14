@@ -24,19 +24,19 @@ const HomeScreen = ({ navigation, route }) => {
         <Drawer.Navigator
             drawerContent={props => <CustomDrawer {...props} />}
             screenOptions={{
-                drawerActiveBackgroundColor: '#212B46',
-                drawerInactiveBackgroundColor: '#212B46',
+                drawerActiveBackgroundColor: '#333333',
+                drawerInactiveBackgroundColor: '#333333',
                 drawerActiveTintColor: '#48b8f9',
                 drawerInactiveTintColor: 'white',
                 drawerContentStyle: {
-                    backgroundColor: '#212B46',
+                    backgroundColor: '#333333',
                 },
                 drawerLabelStyle: {
                     marginLeft: -25,
                     fontSize: 15,
                 },
                 drawerStyle: {
-                    backgroundColor: '#212B46',
+                    backgroundColor: '#333333',
                 },
                 drawerItemStyle: {
                     marginTop: -2,

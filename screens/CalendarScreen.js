@@ -7,34 +7,34 @@ import CalendarStrip from 'react-native-calendar-strip';
 
 const MapScreen = ({navigation, route}) => {
 
-    const [listMatches, setListMatches] = useState([{"id":41357,"date":"2024-05-11T13:00:00+00:00","time":"13:00","timestamp":1715432400,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":120,"name":"USA Perpignan","logo":"https://media.api-sports.io/rugby/teams/120.png"},"away":{"id":99,"name":"Clermont","logo":"https://media.api-sports.io/rugby/teams/99.png"}},"scores":{"home":28,"away":35},"periods":{"first":{"home":10,"away":3},"second":{"home":18,"away":32},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41356,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":105,"name":"Section Paloise","logo":"https://media.api-sports.io/rugby/teams/105.png"},"away":{"id":731,"name":"US Oyonnax","logo":"https://media.api-sports.io/rugby/teams/731.png"}},"scores":{"home":39,"away":17},"periods":{"first":{"home":19,"away":10},"second":{"home":20,"away":7},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41359,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":103,"name":"RC Toulonnais","logo":"https://media.api-sports.io/rugby/teams/103.png"},"away":{"id":101,"name":"Lyon","logo":"https://media.api-sports.io/rugby/teams/101.png"}},"scores":{"home":30,"away":24},"periods":{"first":{"home":13,"away":3},"second":{"home":17,"away":21},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41360,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":98,"name":"Castres Olympique","logo":"https://media.api-sports.io/rugby/teams/98.png"},"away":{"id":102,"name":"Montpellier","logo":"https://media.api-sports.io/rugby/teams/102.png"}},"scores":{"home":27,"away":26},"periods":{"first":{"home":13,"away":16},"second":{"home":14,"away":10},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41362,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":104,"name":"Racing 92","logo":"https://media.api-sports.io/rugby/teams/104.png"},"away":{"id":95,"name":"Aviron Bayonnais","logo":"https://media.api-sports.io/rugby/teams/95.png"}},"scores":{"home":28,"away":37},"periods":{"first":{"home":21,"away":28},"second":{"home":7,"away":9},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41361,"date":"2024-05-11T19:05:00+00:00","time":"19:05","timestamp":1715454300,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":96,"name":"Bordeaux Begles","logo":"https://media.api-sports.io/rugby/teams/96.png"},"away":{"id":100,"name":"Stade Rochelais","logo":"https://media.api-sports.io/rugby/teams/100.png"}},"scores":{"home":34,"away":14},"periods":{"first":{"home":19,"away":7},"second":{"home":15,"away":7},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}}])
+    // const [listMatches, setListMatches] = useState([{"id":41357,"date":"2024-05-11T13:00:00+00:00","time":"13:00","timestamp":1715432400,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":120,"name":"USA Perpignan","logo":"https://media.api-sports.io/rugby/teams/120.png"},"away":{"id":99,"name":"Clermont","logo":"https://media.api-sports.io/rugby/teams/99.png"}},"scores":{"home":28,"away":35},"periods":{"first":{"home":10,"away":3},"second":{"home":18,"away":32},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41356,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":105,"name":"Section Paloise","logo":"https://media.api-sports.io/rugby/teams/105.png"},"away":{"id":731,"name":"US Oyonnax","logo":"https://media.api-sports.io/rugby/teams/731.png"}},"scores":{"home":39,"away":17},"periods":{"first":{"home":19,"away":10},"second":{"home":20,"away":7},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41359,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":103,"name":"RC Toulonnais","logo":"https://media.api-sports.io/rugby/teams/103.png"},"away":{"id":101,"name":"Lyon","logo":"https://media.api-sports.io/rugby/teams/101.png"}},"scores":{"home":30,"away":24},"periods":{"first":{"home":13,"away":3},"second":{"home":17,"away":21},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41360,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":98,"name":"Castres Olympique","logo":"https://media.api-sports.io/rugby/teams/98.png"},"away":{"id":102,"name":"Montpellier","logo":"https://media.api-sports.io/rugby/teams/102.png"}},"scores":{"home":27,"away":26},"periods":{"first":{"home":13,"away":16},"second":{"home":14,"away":10},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41362,"date":"2024-05-11T15:00:00+00:00","time":"15:00","timestamp":1715439600,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":104,"name":"Racing 92","logo":"https://media.api-sports.io/rugby/teams/104.png"},"away":{"id":95,"name":"Aviron Bayonnais","logo":"https://media.api-sports.io/rugby/teams/95.png"}},"scores":{"home":28,"away":37},"periods":{"first":{"home":21,"away":28},"second":{"home":7,"away":9},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}},{"id":41361,"date":"2024-05-11T19:05:00+00:00","time":"19:05","timestamp":1715454300,"timezone":"UTC","week":"23","status":{"long":"Finished","short":"FT"},"country":{"id":7,"name":"France","code":"FR","flag":"https://media.api-sports.io/flags/fr.svg"},"league":{"id":16,"name":"Top 14","type":"League","logo":"https://media.api-sports.io/rugby/leagues/16.png","season":2023},"teams":{"home":{"id":96,"name":"Bordeaux Begles","logo":"https://media.api-sports.io/rugby/teams/96.png"},"away":{"id":100,"name":"Stade Rochelais","logo":"https://media.api-sports.io/rugby/teams/100.png"}},"scores":{"home":34,"away":14},"periods":{"first":{"home":19,"away":7},"second":{"home":15,"away":7},"overtime":{"home":null,"away":null},"second_overtime":{"home":null,"away":null}}}])
+
+    const [listMatches, setListMatches] = useState([])
 
 
-    // useEffect(() => {
-    //     getMatches()
+    useEffect(() => {
+        getMatches()
 
-    //     async function getMatches(){
-    //         const today = moment().format('YYYY-MM-DD')
-    //         const twodays = moment().subtract(2, 'days').format('YYYY-MM-DD')
-    //         const threedays = moment().subtract(3, 'days').format('YYYY-MM-DD')
+        async function getMatches(){
+            const today = moment().format('YYYY-MM-DD')
 
-    //         fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+threedays, {
-    //             "method": "GET",
-    //             "headers": {
-    //                 "x-rapidapi-host": "v1.rugby.api-sports.io",
-    //                 "x-rapidapi-key": "a23ab0288fb5533c2359b3ffe6a416a9"
-    //             }
-    //         })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log(JSON.stringify(data.response));
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         });
-    //     }
+            fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+today, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "v1.rugby.api-sports.io",
+                    "x-rapidapi-key": "a23ab0288fb5533c2359b3ffe6a416a9"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                setListMatches([...data.response])
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
 
-    // }, [])
+    }, [])
     
     const fetchDateMatches = async (date) => {
         const searchDate = moment(date).format('YYYY-MM-DD')
@@ -43,13 +43,11 @@ const MapScreen = ({navigation, route}) => {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
-                "x-rapidapi-key": "a23ab0288fb5533c2359b3ffe6a416a9"
+                "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            console.log(JSON.stringify(data.response));
             setListMatches([...data.response])
         })
         .catch(err => {
@@ -129,7 +127,7 @@ const MapScreen = ({navigation, route}) => {
                                 </View>
                             ) : e.status.long == 'Not Started' ? (
                                 <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                    <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.time}</Text>
+                                    <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
                                 </View>
                             ) : (
                                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
