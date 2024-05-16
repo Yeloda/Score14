@@ -20,7 +20,7 @@
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 2
+      "versionCode": 3
     },
     "runtimeVersion": {
       "policy": "appVersion"
@@ -29,6 +29,9 @@
       "eas": {
         "projectId": "59844a20-c33a-433a-b5a5-c93cda84e6eb"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/59844a20-c33a-433a-b5a5-c93cda84e6eb"
     }
   }
 }

@@ -37,6 +37,7 @@ const RankingScreen = ({navigation, route}) => {
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 setRankings([...data.response[0]])
             }).catch(err => {
                 console.log(err);
