@@ -16,11 +16,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yeloda.score14",
-      "buildNumber": "1"
+      "buildNumber": "2"
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 3
+      "versionCode": 4
     },
     "runtimeVersion": {
       "policy": "appVersion"
