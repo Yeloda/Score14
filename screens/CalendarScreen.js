@@ -22,11 +22,12 @@ const MapScreen = ({navigation, route}) => {
                 "method": "GET",
                 "headers": {
                     "x-rapidapi-host": "v1.rugby.api-sports.io",
-                    "x-rapidapi-key": "a23ab0288fb5533c2359b3ffe6a416a9"
+                    "x-rapidapi-key": process.env.API_KEY
                 }
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data);
                 setListMatches([...data.response])
             })
             .catch(err => {
