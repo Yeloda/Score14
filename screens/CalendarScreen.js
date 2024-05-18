@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -9,6 +9,8 @@ const MapScreen = ({navigation, route}) => {
 
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
 
     useEffect(() => {
         getMatches()
@@ -34,10 +36,10 @@ const MapScreen = ({navigation, route}) => {
                 setIsLoading(false)
             });
         }
-
     }, [])
     
     const fetchDateMatches = async (date) => {
+        setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 
         fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+searchDate, {
@@ -53,6 +55,27 @@ const MapScreen = ({navigation, route}) => {
         })
         .catch(err => {
             console.log(err);
+        });
+    }
+
+    const onRefresh = async () => {
+        setIsRefreshing(true)
+
+        fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+moment(selectedDate).format('YYYY-MM-DD'), {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
+                "x-rapidapi-key": process.env.API_KEY
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setListMatches([...data.response])
+            setIsRefreshing(false)
+        })
+        .catch(err => {
+            console.log(err);
+            setIsRefreshing(false)
         });
     }
 
@@ -100,7 +123,10 @@ const MapScreen = ({navigation, route}) => {
                 </View>
             )}
 
-            <ScrollView style={{marginTop: 10,}}>
+            <ScrollView 
+                style={{marginTop: 10,}}
+                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+            >
                 { isLoading ? (
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
