@@ -8,6 +8,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 const MapScreen = ({navigation, route}) => {
 
     const [listMatches, setListMatches] = useState([])
+    const [listMatchesChampion, setListMatchesChampion] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
@@ -35,6 +36,23 @@ const MapScreen = ({navigation, route}) => {
                 console.log(err);
                 setIsLoading(false)
             });
+
+            fetch("https://v1.rugby.api-sports.io/games?season=2023&league=54&date="+today, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "v1.rugby.api-sports.io",
+                    "x-rapidapi-key": process.env.API_KEY
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                setListMatchesChampion([...data.response])
+                setIsLoading(false)
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false)
+            });
         }
     }, [])
     
@@ -56,12 +74,31 @@ const MapScreen = ({navigation, route}) => {
         .catch(err => {
             console.log(err);
         });
+
+        fetch("https://v1.rugby.api-sports.io/games?season=2023&league=54&date="+searchDate, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
+                "x-rapidapi-key": process.env.API_KEY
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(JSON.stringify(data.response));
+            setListMatchesChampion([...data.response])
+            setIsLoading(false)
+        })
+        .catch(err => {
+            console.log(err);
+            setIsLoading(false)
+        });
     }
 
     const onRefresh = async () => {
         setIsRefreshing(true)
+        const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+moment(selectedDate).format('YYYY-MM-DD'), {
+        fetch("https://v1.rugby.api-sports.io/games?season=2023&league=16&date="+searchDate, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
@@ -71,6 +108,24 @@ const MapScreen = ({navigation, route}) => {
         .then(response => response.json())
         .then(data => {
             setListMatches([...data.response])
+            setIsRefreshing(false)
+        })
+        .catch(err => {
+            console.log(err);
+            setIsRefreshing(false)
+        });
+
+
+        fetch("https://v1.rugby.api-sports.io/games?season=2023&league=54&date="+searchDate, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
+                "x-rapidapi-key": process.env.API_KEY
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setListMatchesChampion([...data.response])
             setIsRefreshing(false)
         })
         .catch(err => {
@@ -115,71 +170,175 @@ const MapScreen = ({navigation, route}) => {
                 highlightDateNumberStyle={{color:'#61ff61',fontWeight: 'bold',fontSize: 13,}}
             />
 
-            {listMatches.length > 0 && (
-                <View style={[styles.elevate, {borderWidth:1, borderColor:'#808080', backgroundColor: '#d9d9d9',alignItems:'center',justifyContent:'center',height: 40,paddingHorizontal: 20, borderRadius: 10,alignSelf:'center',marginTop: 10,}]}>
-                    <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
-                        {moment(listMatches[0].date).format('dddd LL')} - Journée {listMatches[0].week}
-                    </Text>
-                </View>
-            )}
-
             <ScrollView 
-                style={{marginTop: 10,}}
                 refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             >
                 { isLoading ? (
                     <ActivityIndicator style={{marginTop: 50,}}/>
-                ) : listMatches.length == 0 ? (
-                    <View style={{}}>
+                ) : (listMatches.length == 0 && listMatchesChampion.length == 0) ? (
+                    <View style={{marginTop: 10,}}>
                         <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
                     </View>
-                ) : listMatches.map(e => {
-                    return(
-                        <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
-                            <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                ) : (
+                    <>
+                        {listMatches.length > 0 && (
+                            <View 
+                                style={[
+                                    styles.elevate, 
+                                    {
+                                        height: 40,
+                                        flexDirection:'row',
+                                        justifyContent:'center',
+                                        alignItems:'center',
+                                        alignSelf:'center',
+                                        gap: 5,
+                                        backgroundColor: '#d9d9d9',
+                                        borderWidth:1,
+                                        borderColor:'#808080',
+                                        marginVertical: 10,
+                                        paddingHorizontal: 20,
+                                        borderRadius: 10,
+                                    }
+                                ]}
+                            >
                                 <Image
-                                    style={{width: 30, height: 30}}
+                                    style={{width: 30, height: 30, borderRadius: 3,}}
                                     resizeMode='contain'
-                                    source={{uri: e.teams.home.logo}}
+                                    source={{uri: listMatches[0].league.logo}}
                                 />
+                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
+                                    - {moment(listMatches[0].date).format('dddd LL')} - Journée {listMatches[0].week}
+                                </Text>
                             </View>
+                        )}
+                        {listMatches.map(e => {
+                            return(
+                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
+                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                        <Image
+                                            style={{width: 30, height: 30}}
+                                            resizeMode='contain'
+                                            source={{uri: e.teams.home.logo}}
+                                        />
+                                    </View>
 
-                            {e.status.long == 'Finished' ? (
-                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                    </View>
-                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                    </View>
-                                </View>
-                            ) : e.status.long == 'Not Started' ? (
-                                <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                    <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
-                                </View>
-                            ) : (
-                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                    </View>
-                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                    </View>
-                                </View>
-                            )}
+                                    {e.status.long == 'Finished' ? (
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                            </View>
+                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                            </View>
+                                        </View>
+                                    ) : e.status.long == 'Not Started' ? (
+                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
+                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                        </View>
+                                    ) : (
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                            </View>
+                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                            </View>
+                                        </View>
+                                    )}
 
-                            <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                        <Image
+                                            style={{width: 30, height: 30}}
+                                            resizeMode='contain'
+                                            source={{uri: e.teams.away.logo}}
+                                        />
+                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                    </View>
+                                </View>
+                            )
+                        })}
+
+                        {listMatchesChampion.length > 0 && (
+                            <View 
+                                style={[
+                                    styles.elevate, 
+                                    {
+                                        height: 40,
+                                        flexDirection:'row',
+                                        justifyContent:'center',
+                                        alignItems:'center',
+                                        alignSelf:'center',
+                                        gap: 5,
+                                        backgroundColor: '#d9d9d9',
+                                        borderWidth:1,
+                                        borderColor:'#808080',
+                                        marginVertical: 10,
+                                        paddingHorizontal: 20,
+                                        borderRadius: 10,
+                                    }
+                                ]}
+                            >
                                 <Image
-                                    style={{width: 30, height: 30}}
+                                    style={{width: 30, height: 30, borderRadius: 3,}}
                                     resizeMode='contain'
-                                    source={{uri: e.teams.away.logo}}
+                                    source={{uri: listMatchesChampion[0].league.logo}}
                                 />
-                                <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
+                                    - {moment(listMatchesChampion[0].date).format('dddd LL')}
+                                </Text>
                             </View>
-                        </View>
-                    )
-                })}
+                        )}
+                        {listMatchesChampion.map(e => {
+                            return(
+                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
+                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                        <Image
+                                            style={{width: 30, height: 30}}
+                                            resizeMode='contain'
+                                            source={{uri: e.teams.home.logo}}
+                                        />
+                                    </View>
+
+                                    {e.status.long == 'Finished' ? (
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                            </View>
+                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                            </View>
+                                        </View>
+                                    ) : e.status.long == 'Not Started' ? (
+                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
+                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                        </View>
+                                    ) : (
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                            </View>
+                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                            </View>
+                                        </View>
+                                    )}
+
+                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                        <Image
+                                            style={{width: 30, height: 30}}
+                                            resizeMode='contain'
+                                            source={{uri: e.teams.away.logo}}
+                                        />
+                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                    </View>
+                                </View>
+                            )
+                        })}
+                    </>
+                )
+            }
 
                 <View style={{height: 50}}/>
             </ScrollView>
