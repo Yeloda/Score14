@@ -39,13 +39,13 @@ const RankingScreen = ({navigation, route}) => {
             .then(data => {
                 setRankings([...data.response[0]])
             }).catch(err => {
+                alert('Une erreur s\'est produite pendant le chargement : '+JSON.stringify(err))
                 console.log(err);
             });
 
         }
     }, [])
 
-    
 
     return (
         <View style={{flex: 1}}>

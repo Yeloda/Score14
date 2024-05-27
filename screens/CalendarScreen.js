@@ -50,6 +50,7 @@ const MapScreen = ({navigation, route}) => {
                 setIsLoading(false)
             })
             .catch(err => {
+                alert(JSON.stringify(err))
                 console.log(err);
                 setIsLoading(false)
             });
@@ -84,7 +85,6 @@ const MapScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(JSON.stringify(data.response));
             setListMatchesChampion([...data.response])
             setIsLoading(false)
         })
@@ -301,7 +301,7 @@ const MapScreen = ({navigation, route}) => {
                                         />
                                     </View>
 
-                                    {e.status.long == 'Finished' ? (
+                                    {(e.status.long == 'Finished' || e.status.long == 'After Extra Time') ? (
                                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                             <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
                                                 <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
