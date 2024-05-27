@@ -89,6 +89,8 @@ const MapScreen = ({navigation, route}) => {
             setIsLoading(false)
         })
         .catch(err => {
+            alert(JSON.stringify(err))
+
             console.log(err);
             setIsLoading(false)
         });
