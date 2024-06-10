@@ -10,16 +10,6 @@ import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 const { Navigator, Screen } = createMaterialBottomTabNavigator();
 
 const BottomTabsNavigator = ({ navigation,route }) => {
-    useEffect(() => {
-        fetchData()
-        async function fetchData(){
-
-        }
-
-
-    }, [])
-
-
     return (
         <Navigator
             activeColor="white"

@@ -1,12 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarStrip from 'react-native-calendar-strip';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const MapScreen = ({navigation, route}) => {
 
+    const { firstAd, setFirstAd, interstitial } = useContext(GlobalContext);
+    
     const [listMatches, setListMatches] = useState([])
     const [listMatchesChampion, setListMatchesChampion] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -58,6 +61,10 @@ const MapScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
+        if(firstAd){
+            setFirstAd(false)
+            interstitial.show();
+        }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 

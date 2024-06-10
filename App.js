@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as eva from '@eva-design/eva';
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from 'expo-splash-screen';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import mobileAds from 'react-native-google-mobile-ads';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
 import AppNavigator from "./navigation/AppNavigator"
 import { GlobalContext } from "./contexts/GlobalContext";
@@ -19,8 +21,47 @@ const secondColor = "#0A0C6A"
 import 'moment';
 import 'moment/locale/fr'; 
 
+import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
+import { Platform } from 'react-native';
+
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-6675990995324469/6316225123';
+// ca-app-pub-6675990995324469~4727525870
+// ca-app-pub-6675990995324469/6316225123
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId);
+
 export default function App() {
-    const [isLoading, setIsLoading] = useState(false)
+
+    const [isLoading, setIsLoading] = useState(true)
+    const [firstAd, setFirstAd] = useState(true)
+
+    useEffect(() => {
+        checkAds()
+
+        const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+            setIsLoading(false);
+        });
+      
+        // Start loading the interstitial straight away
+        interstitial.load();
+    
+        // Unsubscribe from events on unmount
+        return unsubscribe;
+
+        async function checkAds(){
+            if(Platform.OS == 'ios'){
+                const result = await check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+                if (result === RESULTS.DENIED) {
+                  // The permission has not been requested, so request it.
+                  await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
+                }
+            }
+
+            const adapterStatuses = mobileAds().initialize()
+        }
+    }, [])
+    
 
     return(
         <>
@@ -31,6 +72,9 @@ export default function App() {
                     <GlobalContext.Provider value={{
                         isLoading,
                         setIsLoading,
+                        firstAd,
+                        setFirstAd,
+                        interstitial
                     }}>
                         <AppNavigator />
                     </GlobalContext.Provider>

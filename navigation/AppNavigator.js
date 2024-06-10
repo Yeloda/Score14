@@ -15,8 +15,6 @@ const AppNavigator = (props) => {
             <NavigationContainer>
                 <Stack.Navigator screenOptions={{headerBackTitleVisible: false}}>
                     <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
-                
-
                 </Stack.Navigator>
             </NavigationContainer>
 
