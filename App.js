@@ -34,7 +34,10 @@ const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 export default function App() {
 
     const [isLoading, setIsLoading] = useState(true)
+
     const [firstAd, setFirstAd] = useState(true)
+    const [firstProD2Ad, setFirstProD2Ad] = useState(true)
+    const [firstLigue1Ad, setFirstLigue1Ad] = useState(true)
 
     useEffect(() => {
         checkAds()
@@ -42,12 +45,15 @@ export default function App() {
         const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
             setIsLoading(false);
         });
+        const unloaded = interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+            interstitial.load();
+        });
       
         // Start loading the interstitial straight away
         interstitial.load();
     
         // Unsubscribe from events on unmount
-        return unsubscribe;
+        return unsubscribe, unloaded;
 
         async function checkAds(){
             if(Platform.OS == 'ios'){
@@ -74,7 +80,11 @@ export default function App() {
                         setIsLoading,
                         firstAd,
                         setFirstAd,
-                        interstitial
+                        interstitial,
+                        firstProD2Ad,
+                        setFirstProD2Ad,
+                        firstLigue1Ad,
+                        setFirstLigue1Ad
                     }}>
                         <AppNavigator />
                     </GlobalContext.Provider>

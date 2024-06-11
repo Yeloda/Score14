@@ -1,15 +1,15 @@
 import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { GlobalContext } from '../contexts/GlobalContext'
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 const { width, height } = Dimensions.get('window')
 
-const RankingScreen = ({navigation, route}) => {
+const FootballRankingScreen = ({navigation, route}) => {
 
     const { isLoading, setIsLoading } = useContext(GlobalContext);
 
-    const [rankings, setRankings] = useState([])
+    const [footballRankings, setFootballRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
 
 
@@ -20,12 +20,13 @@ const RankingScreen = ({navigation, route}) => {
     const onRefresh = async () => {
         getRanks(true)
     }
-        
+
     async function getRanks(doRefresh){
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2023", {
+        // fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2023", {
+        fetch("https://v3.football.api-sports.io/standings?league=61&season=2023", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
@@ -34,14 +35,14 @@ const RankingScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            setRankings([...data.response[0]])
+            setFootballRankings([...data.response[0].league.standings[0]])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement : '+JSON.stringify(err))
+            alert('Une erreur s\'est produite pendant le chargement : ')
             console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
+
     }
 
     return (
@@ -81,89 +82,100 @@ const RankingScreen = ({navigation, route}) => {
             )}
 
             <ScrollView
-                style={{flex: 1,height: '100%',}}
-                contentContainerStyle={{flex: 1}}
                 refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             >
-                {!isLoading && rankings.map((e, index) => {
+                {!isLoading && footballRankings.map((e, index) => {
 
                     let teamName = ''
                     switch (e.team.name) {
-                        case "Stade Toulousain":
-                            teamName = "ST"
+                        case "Paris Saint Germain":
+                            teamName = "PSG"
                             break;
-                        case "Stade Francais Paris":
-                            teamName = "SFP"
-                            break;
-                        case "Bordeaux Begles":
-                            teamName = "UBB"
-                            break;
-                        case "RC Toulonnais":
-                            teamName = "RCT"
-                            break;
-                        case "Racing 92":
-                            teamName = "R92"
-                            break;
-                        case "Stade Rochelais":
-                            teamName = "SR"
-                            break;
-                        case "Section Paloise":
-                            teamName = "SP"
-                            break;
-                        case "Castres Olympique":
-                            teamName = "CO"
-                            break;
-                        case "USA Perpignan":
-                            teamName = "USAP"
-                            break;
-                        case "Clermont":
+                        case "Monaco":
                             teamName = "ASM"
                             break;
-                        case "Aviron Bayonnais":
-                            teamName = "AB"
+                        case "Stade Brestois 29":
+                            teamName = "BRE"
+                            break;
+                        case "Lille":
+                            teamName = "LIL"
+                            break;
+                        case "Nice":
+                            teamName = "NIC"
                             break;
                         case "Lyon":
-                            teamName = "LOU"
+                            teamName = "OL"
+                            break;
+                        case "Lens":
+                            teamName = "LEN"
+                            break;
+                        case "Marseille":
+                            teamName = "OM"
+                            break;
+                        case "Reims":
+                            teamName = "REI"
+                            break;
+                        case "Rennes":
+                            teamName = "REN"
+                            break;
+                        case "Toulouse":
+                            teamName = "TOU"
                             break;
                         case "Montpellier":
-                            teamName = "MHR"
+                            teamName = "MPL"
                             break;
-                        case "US Oyonnax":
-                            teamName = "OR"
+                        case "Strasbourg":
+                            teamName = "STR"
                             break;
-                    
+                        case "Nantes":
+                            teamName = "NAN"
+                            break;
+                        case "LE Havre":
+                            teamName = "HAV"
+                            break;
+                        case "Metz":
+                            teamName = "MET"
+                            break;
+                        case "Lorient":
+                            teamName = "LOR"
+                            break;
+                        case "Clermont Foot":
+                            teamName = "CLE"
+                            break;
+
                         default:
                             teamName = e.team.name
                             break;
                     }
 
+
                     return(
-                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: '7.12%',}}>
+                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
                                     style={{width: 28, height: 28}}
                                     resizeMode='contain'
-                                    source={{uri: e.team.logo == 'https://media.api-sports.io/rugby/teams/0.png' ? 'https://media.api-sports.io/rugby/teams/100.png' : e.team.logo}}
+                                    source={{uri: e.team.logo}}
                                 />
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -178,6 +190,6 @@ const RankingScreen = ({navigation, route}) => {
     )
 }
 
-export default RankingScreen
+export default FootballRankingScreen
 
 const styles = StyleSheet.create({})

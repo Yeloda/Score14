@@ -3,7 +3,7 @@
     "name": "Score14",
     "slug": "score14",
     "icon": "./assets/logo_3.png",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/logo_sans_bg.png",
@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 6
+      "versionCode": 8
     },
     "runtimeVersion": {
       "policy": "appVersion"

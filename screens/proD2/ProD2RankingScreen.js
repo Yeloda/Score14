@@ -1,11 +1,11 @@
 import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { GlobalContext } from '../contexts/GlobalContext'
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 const { width, height } = Dimensions.get('window')
 
-const RankingScreen = ({navigation, route}) => {
+const ProD2RankingScreen = ({navigation, route}) => {
 
     const { isLoading, setIsLoading } = useContext(GlobalContext);
 
@@ -20,12 +20,11 @@ const RankingScreen = ({navigation, route}) => {
     const onRefresh = async () => {
         getRanks(true)
     }
-        
-    async function getRanks(doRefresh){
 
+    async function getRanks(doRefresh){
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2023", {
+        fetch("https://v1.rugby.api-sports.io/standings?league=17&season=2023", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
@@ -41,7 +40,9 @@ const RankingScreen = ({navigation, route}) => {
             alert('Une erreur s\'est produite pendant le chargement : '+JSON.stringify(err))
             console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+
         });
+
     }
 
     return (
@@ -81,55 +82,59 @@ const RankingScreen = ({navigation, route}) => {
             )}
 
             <ScrollView
-                style={{flex: 1,height: '100%',}}
-                contentContainerStyle={{flex: 1}}
                 refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             >
                 {!isLoading && rankings.map((e, index) => {
 
                     let teamName = ''
                     switch (e.team.name) {
-                        case "Stade Toulousain":
-                            teamName = "ST"
+                        case "Provence Rugby":
+                            teamName = "PR"
                             break;
-                        case "Stade Francais Paris":
-                            teamName = "SFP"
+                        case "Vannes":
+                            teamName = "RCV"
                             break;
-                        case "Bordeaux Begles":
-                            teamName = "UBB"
+                        case "Beziers":
+                            teamName = "ASBH"
                             break;
-                        case "RC Toulonnais":
-                            teamName = "RCT"
+                        case "Grenoble FC":
+                            teamName = "FCG"
                             break;
-                        case "Racing 92":
-                            teamName = "R92"
+                        case "US Dax":
+                            teamName = "USD"
                             break;
-                        case "Stade Rochelais":
-                            teamName = "SR"
+                        case "CA Brive":
+                            teamName = "CAB"
                             break;
-                        case "Section Paloise":
-                            teamName = "SP"
+                        case "Nevers":
+                            teamName = "USON"
                             break;
-                        case "Castres Olympique":
-                            teamName = "CO"
+                        case "Mont-de-Marsan":
+                            teamName = "SMR"
                             break;
-                        case "USA Perpignan":
-                            teamName = "USAP"
+                        case "Aurillac":
+                            teamName = "SA"
                             break;
-                        case "Clermont":
-                            teamName = "ASM"
+                        case "Colomiers":
+                            teamName = "CR"
                             break;
-                        case "Aviron Bayonnais":
-                            teamName = "AB"
+                        case "Angouleme":
+                            teamName = "SA XV"
                             break;
-                        case "Lyon":
-                            teamName = "LOU"
+                        case "Valence Romans":
+                            teamName = "VRDR"
                             break;
-                        case "Montpellier":
-                            teamName = "MHR"
+                        case "Agen":
+                            teamName = "SUA"
                             break;
-                        case "US Oyonnax":
-                            teamName = "OR"
+                        case "Biarritz Olympique":
+                            teamName = "BO"
+                            break;
+                        case "Montauban":
+                            teamName = "USM"
+                            break;
+                        case "Rouen Normandie":
+                            teamName = "RNR"
                             break;
                     
                         default:
@@ -138,7 +143,7 @@ const RankingScreen = ({navigation, route}) => {
                     }
 
                     return(
-                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: '7.12%',}}>
+                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
@@ -178,6 +183,6 @@ const RankingScreen = ({navigation, route}) => {
     )
 }
 
-export default RankingScreen
+export default ProD2RankingScreen
 
 const styles = StyleSheet.create({})

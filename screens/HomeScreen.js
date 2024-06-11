@@ -6,7 +6,9 @@ import CustomDrawer from '../components/CustomDrawer';
 import BottomTabsNavigator from '../navigation/BottomTabsNavigator'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'; 
+import FootballNavigator from '../navigation/FootballNavigator';
+import ProD2Navigator from '../navigation/ProD2Navigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -44,16 +46,43 @@ const HomeScreen = ({ navigation, route }) => {
             }}
         >
             <Drawer.Screen
-                name="Accueil"
+                name="Top 14"
                 component={BottomTabsNavigator}
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
-                        <Ionicons name="home-outline" size={22} color={color} />
+                        <MaterialIcons name="sports-rugby" size={22} color={color} />
+                        // <Ionicons name="home-outline" size={22} color={color} />
                     ),
                     headerTitle: () => <></>,
                     headerStyle: { backgroundColor: '#333333', height: 60 },
-                    // headerTintColor: '#fff',
+                }}
+            />
+            
+            <Drawer.Screen
+                name="Pro D2"
+                component={ProD2Navigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <MaterialIcons name="sports-rugby" size={22} color={color} />
+                        // <Ionicons name="home-outline" size={22} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name="Ligue 1"
+                component={FootballNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
             />
         </Drawer.Navigator>
