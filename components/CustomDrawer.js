@@ -23,7 +23,7 @@ const CustomDrawer = props => {
                     <Text style={{color: '#fff',fontSize: 18,marginBottom: 5,}}>Score14</Text>
 
                     <View style={{flexDirection: 'row'}}>
-                        <Text style={{color: '#fff',marginRight: 5,}}>Le Top14 dans votre poche !</Text>
+                        <Text style={{color: '#fff',marginRight: 5,}}>Votre Hub Sportif Complet !</Text>
                     </View>
                 </ImageBackground>
 

@@ -53,8 +53,12 @@ const RankingScreen = ({navigation, route}) => {
                 >
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
-                <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '23%',}}>
-
+                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
+                    <Image
+                        style={{width: 30,height: 30,marginLeft: 5}}
+                        resizeMode='contain'
+                        source={{uri: "https://media.api-sports.io/rugby/leagues/16.png"}}
+                    />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
                     <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>J</Text>

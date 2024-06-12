@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 9
+      "versionCode": 10
     },
     "runtimeVersion": {
       "policy": "appVersion"
