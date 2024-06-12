@@ -6,94 +6,61 @@ import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarStrip from 'react-native-calendar-strip';
 import { GlobalContext } from '../../contexts/GlobalContext';
 
-const FootballCalendarScreen = ({navigation, route}) => {
+const Formule1CalendarScreen = ({navigation, route}) => {
 
-    const { firstLigue1Ad, setFirstLigue1Ad, interstitial } = useContext(GlobalContext);
+    const { firstFormule1Ad, setFirstFormule1Ad, interstitial } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
-    const [listMatchesChampion, setListMatchesChampion] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
 
     useEffect(() => {
         getMatches()
+
+        async function getMatches(){
+            setIsLoading(true)
+            const today = moment().format('YYYY-MM-DD')
+
+            fetch("https://v1.basketball.api-sports.io/games?season=2023-2024league=12&date="+today, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "v1.basketball.api-sports.io",
+                    "x-rapidapi-key": process.env.API_KEY
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                setListMatches([...data.response])
+                setIsLoading(false)
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false)
+            });
+        }
     }, [])
-        
-    async function getMatches(){
-        setIsLoading(true)
-        const today = moment().format('YYYY-MM-DD')
-
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=61&date="+today, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            setListMatches([...data.response])
-            setIsLoading(false)
-        })
-        .catch(err => {
-            console.log(err);
-            setIsLoading(false)
-        });
-
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=2&date="+today, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            setListMatchesChampion([...data.response])
-            setIsLoading(false)
-        })
-        .catch(err => {
-            console.log(err);
-            setIsLoading(false)
-        });
-    }
-
+    
     const fetchDateMatches = async (date) => {
-        if(firstLigue1Ad){
-            setFirstLigue1Ad(false)
+        if(firstFormule1Ad){
+            setFirstFormule1Ad(false)
             interstitial.show();
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=61&date="+searchDate, {
+        fetch("https://v1.basketball.api-sports.io/games?season=2023-2024&league=12&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
+                "x-rapidapi-host": "v1.basketball.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
+            console.log(JSON.stringify(data.response));
             setListMatches([...data.response])
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=2&date="+searchDate, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            setListMatchesChampion([...data.response])
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err);
         });
     }
@@ -102,34 +69,21 @@ const FootballCalendarScreen = ({navigation, route}) => {
         setIsRefreshing(true)
         const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=61&date="+searchDate, {
+        fetch("https://v1.basketball.api-sports.io/games?season=2023-2024league=12&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
+                "x-rapidapi-host": "v1.basketball.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
             setListMatches([...data.response])
+            setIsRefreshing(false)
         })
         .catch(err => {
             console.log(err);
-        });
-
-        fetch("https://v3.football.api-sports.io/fixtures?season=2023&league=2&date="+searchDate, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            setListMatchesChampion([...data.response])
-        })
-        .catch(err => {
-            console.log(err);
+            setIsRefreshing(false)
         });
     }
 
@@ -205,8 +159,8 @@ const FootballCalendarScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: listMatches[0].league.logo}}
                                 />
-                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
-                                    - {moment(listMatches[0].fixture.date).format('dddd LL')} - Journée {listMatches[0].league.round.slice(-2)}
+                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold'}}>
+                                    {listMatches[0].week}
                                 </Text>
                             </View>
                         )}
@@ -223,79 +177,26 @@ const FootballCalendarScreen = ({navigation, route}) => {
                                         />
                                     </View>
 
-                                    {e.fixture.status.long == 'Match Finished' ? (
+                                    {(e.status.long == 'Game Finished' || e.status.long == 'After Over Time') ? (
                                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                             <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
                                             </View>
                                             <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
                                             </View>
                                         </View>
-                                    ) : e.fixture.status.long == 'Not Started' ? (
+                                    ) : e.status.long == 'Not Started' ? (
                                         <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
                                             <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
                                         </View>
                                     ) : (
                                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                             <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
+                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
                                             </View>
                                             <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                            </View>
-                                        </View>
-                                    )}
-
-                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.away.logo}}
-                                        />
-                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
-                                    </View>
-                                </View>
-                            )
-                        })}
-
-                        {listMatchesChampion.length > 0 && (
-                            <View style={{backgroundColor: '#cfcfcf',padding: 15}}>
-                                <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>Ligue des Champions</Text>
-                            </View>
-                        )}
-                        {listMatchesChampion.map(e => {
-                            return(
-                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
-                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.home.logo}}
-                                        />
-                                    </View>
-
-                                    {e.fixture.status.long == 'Match Finished' ? (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                            </View>
-                                        </View>
-                                    ) : e.fixture.status.long == 'Not Started' ? (
-                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
+                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
                                             </View>
                                         </View>
                                     )}
@@ -322,7 +223,7 @@ const FootballCalendarScreen = ({navigation, route}) => {
     )
 }
 
-export default FootballCalendarScreen
+export default Formule1CalendarScreen
 
 const styles = StyleSheet.create({
     elevate: {

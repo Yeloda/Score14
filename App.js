@@ -26,8 +26,6 @@ import { Platform } from 'react-native';
 
 
 const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-6675990995324469/6316225123';
-// ca-app-pub-6675990995324469~4727525870
-// ca-app-pub-6675990995324469/6316225123
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
@@ -38,6 +36,11 @@ export default function App() {
     const [firstAd, setFirstAd] = useState(true)
     const [firstProD2Ad, setFirstProD2Ad] = useState(true)
     const [firstLigue1Ad, setFirstLigue1Ad] = useState(true)
+    const [firstBasketAd, setFirstBasketAd] = useState(true)
+    const [firstFormule1Ad, setFirstFormule1Ad] = useState(true)
+
+    const [firstPressBasket, setFirstPressBasket] = useState(true)
+    const [firstPressFootball, setFirstPressFootball] = useState(true)
 
     useEffect(() => {
         checkAds()
@@ -84,7 +87,15 @@ export default function App() {
                         firstProD2Ad,
                         setFirstProD2Ad,
                         firstLigue1Ad,
-                        setFirstLigue1Ad
+                        setFirstLigue1Ad,
+                        firstFormule1Ad,
+                        setFirstFormule1Ad,
+                        firstBasketAd,
+                        setFirstBasketAd,
+                        firstPressFootball,
+                        setFirstPressFootball,
+                        firstPressBasket,
+                        setFirstPressBasket
                     }}>
                         <AppNavigator />
                     </GlobalContext.Provider>

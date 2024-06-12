@@ -6,9 +6,11 @@ import CustomDrawer from '../components/CustomDrawer';
 import BottomTabsNavigator from '../navigation/BottomTabsNavigator'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons'; 
 import FootballNavigator from '../navigation/FootballNavigator';
 import ProD2Navigator from '../navigation/ProD2Navigator';
+import BasketNavigator from '../navigation/BasketNavigator';
+import Formule1Navigator from '../navigation/Formule1Navigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -80,6 +82,32 @@ const HomeScreen = ({ navigation, route }) => {
                     headerShown: false,
                     drawerIcon: ({color}) => (
                         <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name="NBA"
+                component={BasketNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <FontAwesome5 name="basketball-ball" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name="Formule 1"
+                component={Formule1Navigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <MaterialIcons name="sports-motorsports" size={24} color={color} />
                     ),
                     headerTitle: () => <></>,
                     headerStyle: { backgroundColor: '#333333', height: 60 },

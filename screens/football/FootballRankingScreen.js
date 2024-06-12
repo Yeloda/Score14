@@ -2,16 +2,25 @@ import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { GlobalContext } from '../../contexts/GlobalContext'
+import { useFocusEffect } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get('window')
 
 const FootballRankingScreen = ({navigation, route}) => {
 
-    const { isLoading, setIsLoading } = useContext(GlobalContext);
+    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading, interstitial } = useContext(GlobalContext);
 
     const [footballRankings, setFootballRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
 
+    useFocusEffect(
+        React.useCallback(() => {
+            if(firstPressFootball){
+                setFirstPressFootball(false)
+                interstitial.show();
+            }
+        }, [])
+    );
 
     useEffect(() => {
         getRanks(false)
@@ -25,11 +34,10 @@ const FootballRankingScreen = ({navigation, route}) => {
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        // fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2023", {
         fetch("https://v3.football.api-sports.io/standings?league=61&season=2023", {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.rugby.api-sports.io",
+                "x-rapidapi-host": "v3.football.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })

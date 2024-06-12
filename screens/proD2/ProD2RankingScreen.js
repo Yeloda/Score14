@@ -151,7 +151,7 @@ const ProD2RankingScreen = ({navigation, route}) => {
                                 <Image
                                     style={{width: 28, height: 28}}
                                     resizeMode='contain'
-                                    source={{uri: e.team.logo == 'https://media.api-sports.io/rugby/teams/0.png' ? 'https://media.api-sports.io/rugby/teams/100.png' : e.team.logo}}
+                                    source={{uri: e.team.logo}}
                                 />
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
                             </View>
