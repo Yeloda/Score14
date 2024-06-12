@@ -11,6 +11,7 @@ import FootballNavigator from '../navigation/FootballNavigator';
 import ProD2Navigator from '../navigation/ProD2Navigator';
 import BasketNavigator from '../navigation/BasketNavigator';
 import Formule1Navigator from '../navigation/Formule1Navigator';
+import EuroNavigator from '../navigation/EuroNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -78,6 +79,19 @@ const HomeScreen = ({ navigation, route }) => {
             <Drawer.Screen
                 name="Ligue 1"
                 component={FootballNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name="Euro 2024"
+                component={EuroNavigator}
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
