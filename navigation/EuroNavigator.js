@@ -4,8 +4,8 @@ import { Platform } from 'react-native';
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 
 import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
-import EuroRankingScreen from '../screens/footballEuro/EuroRankingScreen';
-import EuroCalendarScreen from '../screens/footballEuro/EuroCalendarScreen';
+import EuroRankingScreen from '../screens/EuroFootball/EuroRankingScreen';
+import EuroCalendarScreen from '../screens/EuroFootball/EuroCalendarScreen';
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator();
 

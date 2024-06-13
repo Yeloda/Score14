@@ -24,8 +24,7 @@ import 'moment/locale/fr';
 import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
 import { Platform } from 'react-native';
 
-
-const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-6675990995324469/6316225123';
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8021711542' : 'ca-app-pub-6675990995324469/6316225123';
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
