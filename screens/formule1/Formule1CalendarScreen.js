@@ -22,15 +22,16 @@ const Formule1CalendarScreen = ({navigation, route}) => {
             setIsLoading(true)
             const today = moment().format('YYYY-MM-DD')
 
-            fetch("https://v1.basketball.api-sports.io/games?season=2023-2024league=12&date="+today, {
+            fetch("https://v1.formula-1.api-sports.io/races?competition=23&season=2023&date="+today, {
                 "method": "GET",
                 "headers": {
-                    "x-rapidapi-host": "v1.basketball.api-sports.io",
+                    "x-rapidapi-host": "v1.formula-1.api-sports.io",
                     "x-rapidapi-key": process.env.API_KEY
                 }
             })
             .then(response => response.json())
             .then(data => {
+                data.response.sort((a, b) => a.date > b.date ? 1 : -1)
                 setListMatches([...data.response])
                 setIsLoading(false)
             })
@@ -49,16 +50,17 @@ const Formule1CalendarScreen = ({navigation, route}) => {
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2023-2024&league=12&date="+searchDate, {
+        fetch("https://v1.formula-1.api-sports.io/races?season=2024&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
+                "x-rapidapi-host": "v1.formula-1.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
             console.log(JSON.stringify(data.response));
+            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListMatches([...data.response])
         }).catch(err => {
             console.log(err);
@@ -69,15 +71,16 @@ const Formule1CalendarScreen = ({navigation, route}) => {
         setIsRefreshing(true)
         const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2023-2024league=12&date="+searchDate, {
+        fetch("https://v1.formula-1.api-sports.io/races?competition=23&season=2023&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
+                "x-rapidapi-host": "v1.formula-1.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListMatches([...data.response])
             setIsRefreshing(false)
         })
@@ -97,7 +100,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                 >
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
-                <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '23%',}}/>
+                <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '23%',}} />
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
@@ -130,7 +133,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>Aucune course aujourd'hui</Text>
                     </View>
                 ) : (
                     <>
@@ -154,61 +157,38 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                                     }
                                 ]}
                             >
-                                <Image
-                                    style={{width: 30, height: 30, borderRadius: 3,}}
-                                    resizeMode='contain'
-                                    source={{uri: listMatches[0].league.logo}}
-                                />
                                 <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold'}}>
-                                    {listMatches[0].week}
+                                    {moment(listMatches[0].date).format('dddd LL')}
                                 </Text>
                             </View>
                         )}
 
                         {listMatches.map(e => {
                             return(
-                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
-                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                <View key={Math.random()} style={{marginBottom: 6,width:'100%', backgroundColor: 'white',paddingTop: 8}}>
+                                    <View style={{flexDirection:'row',width: '100%',gap: 5,marginLeft: 10,}}>
                                         <Image
                                             style={{width: 30, height: 30}}
                                             resizeMode='contain'
-                                            source={{uri: e.teams.home.logo}}
+                                            source={{uri: e.circuit.image}}
                                         />
+                                        <View style={{marginTop: 3,marginLeft: 5,}}>
+                                            <Text style={{fontWeight: 'bold',textAlign: 'right',color:'#999999'}}>{e.circuit.name}</Text>
+                                            <Text style={{fontWeight: 'bold',fontSize: 16,marginVertical: 3,marginBottom: 6,}}>{e.type}</Text>
+                                        </View>
                                     </View>
 
-                                    {(e.status.long == 'Game Finished' || e.status.long == 'After Over Time') ? (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
-                                            </View>
-                                        </View>
-                                    ) : e.status.long == 'Not Started' ? (
-                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                    {e.status == 'Completed' ? (
+                                        <View style={{flexDirection:'row',justifyContent:'flex-end',width: '100%',paddingRight: 10,backgroundColor: '#f0f0f0',paddingVertical: 5}}>
+                                            <Text style={{fontWeight: 'bold',color:'#333'}}>{e.status}</Text>
                                         </View>
                                     ) : (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
-                                            </View>
+                                        <View style={{flexDirection:'row',justifyContent:'flex-end',width: '100%',paddingRight: 10,backgroundColor: '#f0f0f0',paddingVertical: 5}}>
+                                            <Text style={{fontWeight: 'bold',color:'#333'}}>
+                                                {e.status} at {moment(e.date).format('HH:mm')}
+                                            </Text>
                                         </View>
                                     )}
-
-                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.away.logo}}
-                                        />
-                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
-                                    </View>
                                 </View>
                             )
                         })}

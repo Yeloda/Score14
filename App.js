@@ -69,6 +69,17 @@ export default function App() {
             const adapterStatuses = mobileAds().initialize()
         }
     }, [])
+
+    useEffect(() => {
+        if(!firstPressBasket){
+            interstitial.show();
+        }
+        if(!firstPressFootball){
+            interstitial.show();
+        }
+    }, [firstPressBasket, firstPressFootball])
+
+    
     
 
     return(

@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window')
 
 const FootballRankingScreen = ({navigation, route}) => {
 
-    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading, interstitial } = useContext(GlobalContext);
+    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading } = useContext(GlobalContext);
 
     const [footballRankings, setFootballRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -17,7 +17,6 @@ const FootballRankingScreen = ({navigation, route}) => {
         React.useCallback(() => {
             if(firstPressFootball){
                 setFirstPressFootball(false)
-                interstitial.show();
             }
         }, [])
     );

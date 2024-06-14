@@ -18,7 +18,6 @@ const BasketRankingScreen = ({navigation, route}) => {
         React.useCallback(() => {
             if(firstPressBasket){
                 setFirstPressBasket(false)
-                interstitial.show();
             }
         }, [])
     );

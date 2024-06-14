@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window')
 
 const EuroRankingScreen = ({navigation, route}) => {
 
-    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading, interstitial } = useContext(GlobalContext);
+    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading } = useContext(GlobalContext);
 
     const [tousRankings, setTousRankings] = useState([])
     const [aRankings, setARankings] = useState([])
@@ -32,7 +32,6 @@ const EuroRankingScreen = ({navigation, route}) => {
         React.useCallback(() => {
             if(firstPressFootball){
                 setFirstPressFootball(false)
-                interstitial.show();
             }
         }, [])
     );
@@ -83,6 +82,14 @@ const EuroRankingScreen = ({navigation, route}) => {
                 >
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
+
+                <View>
+                    <Image
+                        style={{width: 30,height: 30,marginLeft: 29,backgroundColor: 'white',}}
+                        resizeMode='contain'
+                        source={{uri: "https://media.api-sports.io/football/leagues/4.png"}}
+                    />
+                </View>
             </View>
 
             {isLoading ? (
@@ -125,8 +132,7 @@ const EuroRankingScreen = ({navigation, route}) => {
                                                 <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{elt[0].group}</Text>
                                             </View>
 
-                                            <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '6%',}} />
-
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '6%'}} />
 
                                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
                                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>

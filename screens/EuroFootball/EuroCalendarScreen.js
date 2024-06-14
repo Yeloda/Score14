@@ -95,7 +95,13 @@ const EuroCalendarScreen = ({navigation, route}) => {
                 >
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
-                <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '23%',}}/>
+                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
+                    <Image
+                        style={{width: 30,height: 30,marginLeft: 5,backgroundColor: 'white',}}
+                        resizeMode='contain'
+                        source={{uri: "https://media.api-sports.io/football/leagues/4.png"}}
+                    />
+                </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
@@ -186,7 +192,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                                         </View>
                                     ) : e.fixture.status.long == 'Not Started' ? (
                                         <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.fixture.date).format('HH:mm')}</Text>
                                         </View>
                                     ) : (
                                         <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
