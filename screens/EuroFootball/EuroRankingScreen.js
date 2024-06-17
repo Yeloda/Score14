@@ -50,7 +50,6 @@ const EuroRankingScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.response);
             if(data.response[0]){
                 setTousRankings([...data.response[0].league.standings])
                 setARankings([...data.response[0].league.standings[0]])

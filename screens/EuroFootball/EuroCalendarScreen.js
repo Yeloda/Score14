@@ -17,11 +17,14 @@ const EuroCalendarScreen = ({navigation, route}) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
 
+
     useEffect(() => {
-        getMatches()
+        getMatches(false)
     }, [])
-        
-    async function getMatches(){
+
+    async function getMatches(doRefresh){
+        doRefresh ? setIsRefreshing(true) : setIsLoading(true)
+
         setIsLoading(true)
         const today = moment().format('YYYY-MM-DD')
 
@@ -36,10 +39,10 @@ const EuroCalendarScreen = ({navigation, route}) => {
         .then(data => {
             data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
-            setIsLoading(false)
+            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
             console.log(err);
-            setIsLoading(false)
+            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
     }
 
@@ -66,30 +69,6 @@ const EuroCalendarScreen = ({navigation, route}) => {
             console.log(err);
         });
     }
-
-    const onRefresh = async () => {
-        setIsRefreshing(true)
-        const searchDate = moment(selectedDate).format('YYYY-MM-DD')
-
-        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+searchDate, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
-
-            setListMatches([...data.response])
-            setIsRefreshing(false)
-        }).catch(err => {
-            setIsRefreshing(false)
-            console.log(err);
-        });
-    }
-
 
     return (
         <View style={{flex: 1, backgroundColor: '#E6E6E6',}}>
@@ -133,7 +112,12 @@ const EuroCalendarScreen = ({navigation, route}) => {
             />
 
             <ScrollView 
-                refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+                refreshControl={
+                    <RefreshControl 
+                        refreshing={isRefreshing} 
+                        onRefresh={() => getMatches(true)} 
+                    />
+                }
             >
                 { isLoading ? (
                     <ActivityIndicator style={{marginTop: 50,}}/>
