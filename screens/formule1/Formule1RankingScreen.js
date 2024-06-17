@@ -5,12 +5,13 @@ import { AntDesign, Feather } from '@expo/vector-icons'
 import SwitchSelector from "react-native-switch-selector";
 
 import { GlobalContext } from '../../contexts/GlobalContext'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const { width, height } = Dimensions.get('window')
 
 const Formule1RankingScreen = ({navigation, route}) => {
 
-    const { isLoading, setIsLoading } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
 
     const [rankingsPilotes, setRankingsPilotes] = useState([])
     const [rankingsConstructeurs, setRankingsConstructeurs] = useState([])
@@ -44,8 +45,7 @@ const Formule1RankingScreen = ({navigation, route}) => {
             setRankingsPilotes([...data.response])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement : ')
-            console.log(err);
+            alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
 
@@ -62,8 +62,7 @@ const Formule1RankingScreen = ({navigation, route}) => {
             setRankingsConstructeurs([...data.response])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement : ')
-            console.log(err);
+            alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
     }
@@ -152,6 +151,11 @@ const Formule1RankingScreen = ({navigation, route}) => {
 
                 <View style={{height: 50}}/>
             </ScrollView>
+
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
         </View>
     )
 }

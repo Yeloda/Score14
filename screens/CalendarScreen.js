@@ -5,10 +5,11 @@ import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarStrip from 'react-native-calendar-strip';
 import { GlobalContext } from '../contexts/GlobalContext';
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const MapScreen = ({navigation, route}) => {
 
-    const { firstAd, setFirstAd, interstitial } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, interstitial, adBannerId } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [listMatchesChampion, setListMatchesChampion] = useState([])
@@ -34,9 +35,7 @@ const MapScreen = ({navigation, route}) => {
             .then(data => {
                 setListMatches([...data.response])
                 setIsLoading(false)
-            })
-            .catch(err => {
-                console.log(err);
+            }).catch(err => {
                 setIsLoading(false)
             });
 
@@ -51,10 +50,7 @@ const MapScreen = ({navigation, route}) => {
             .then(data => {
                 setListMatchesChampion([...data.response])
                 setIsLoading(false)
-            })
-            .catch(err => {
-                alert(JSON.stringify(err))
-                console.log(err);
+            }).catch(err => {
                 setIsLoading(false)
             });
         }
@@ -78,8 +74,7 @@ const MapScreen = ({navigation, route}) => {
         .then(response => response.json())
         .then(data => {
             setListMatches([...data.response])
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err);
         });
 
@@ -93,13 +88,8 @@ const MapScreen = ({navigation, route}) => {
         .then(response => response.json())
         .then(data => {
             setListMatchesChampion([...data.response])
-            setIsLoading(false)
-        })
-        .catch(err => {
-            alert(JSON.stringify(err))
-
+        }).catch(err => {
             console.log(err);
-            setIsLoading(false)
         });
     }
 
@@ -118,8 +108,7 @@ const MapScreen = ({navigation, route}) => {
         .then(data => {
             setListMatches([...data.response])
             setIsRefreshing(false)
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err);
             setIsRefreshing(false)
         });
@@ -136,8 +125,7 @@ const MapScreen = ({navigation, route}) => {
         .then(data => {
             setListMatchesChampion([...data.response])
             setIsRefreshing(false)
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err);
             setIsRefreshing(false)
         });
@@ -237,48 +225,55 @@ const MapScreen = ({navigation, route}) => {
                         )}
                         {listMatches.map(e => {
                             return(
-                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
-                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.home.logo}}
-                                        />
+                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
+                                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
+                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                            <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.home.logo}}
+                                            />
+                                        </View>
+
+                                        {e.status.long == 'Finished' ? (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        ) : e.status.long == 'Not Started' ? (
+                                            <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
+                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                            </View>
+                                        ) : (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        )}
+
+                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.away.logo}}
+                                            />
+                                            <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                        </View>
                                     </View>
 
-                                    {e.status.long == 'Finished' ? (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                            </View>
-                                        </View>
-                                    ) : e.status.long == 'Not Started' ? (
-                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                            </View>
-                                        </View>
+                                    {e.status.long !== 'Not Started' && (
+                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.date).format('HH:mm')}</Text>
                                     )}
 
-                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.away.logo}}
-                                        />
-                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
-                                    </View>
                                 </View>
                             )
                         })}
@@ -315,48 +310,55 @@ const MapScreen = ({navigation, route}) => {
                         )}
                         {listMatchesChampion.map(e => {
                             return(
-                                <View key={Math.random()} style={{flexDirection:'row',justifyContent:'center',alignItems:'center',marginBottom: 6,width:'100%', backgroundColor: 'white',paddingVertical: 8}}>
-                                    <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                        <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.home.logo}}
-                                        />
+                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
+                                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
+                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                            <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.home.logo}}
+                                            />
+                                        </View>
+
+                                        {(e.status.long == 'Finished' || e.status.long == 'After Extra Time') ? (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        ) : e.status.long == 'Not Started' ? (
+                                            <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
+                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                            </View>
+                                        ) : (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        )}
+
+                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.away.logo}}
+                                            />
+                                            <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                        </View>
                                     </View>
 
-                                    {(e.status.long == 'Finished' || e.status.long == 'After Extra Time') ? (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                            </View>
-                                        </View>
-                                    ) : e.status.long == 'Not Started' ? (
-                                        <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                            <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
-                                        </View>
-                                    ) : (
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
-                                            </View>
-                                            <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
-                                            </View>
-                                        </View>
+                                    {e.status.long !== 'Not Started' && (
+                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.date).format('HH:mm')}</Text>
                                     )}
 
-                                    <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
-                                        <Image
-                                            style={{width: 30, height: 30}}
-                                            resizeMode='contain'
-                                            source={{uri: e.teams.away.logo}}
-                                        />
-                                        <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
-                                    </View>
                                 </View>
                             )
                         })}
@@ -366,6 +368,11 @@ const MapScreen = ({navigation, route}) => {
 
                 <View style={{height: 50}}/>
             </ScrollView>
+
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
 
         </View>
     )

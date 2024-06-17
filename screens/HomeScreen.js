@@ -108,7 +108,7 @@ const HomeScreen = ({ navigation, route }) => {
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
-                        <FontAwesome5 name="basketball-ball" size={24} color={color} />
+                        <FontAwesome5 name="basketball-ball" size={22} color={color} style={{marginRight: 2,marginLeft:3}} />
                     ),
                     headerTitle: () => <></>,
                     headerStyle: { backgroundColor: '#333333', height: 60 },

@@ -2,11 +2,11 @@
   "expo": {
     "name": "Score14",
     "slug": "score14",
-    "icon": "./assets/logo_3.png",
+    "icon": "./assets/logo_score14_petit.png",
     "version": "1.0.4",
     "orientation": "portrait",
     "splash": {
-      "image": "./assets/logo_sans_bg.png",
+      "image": "./assets/logo_avec_texte.png",
       "resizeMode": "contain",
       "backgroundColor": "#333333"
     },
@@ -49,7 +49,7 @@
   },
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-6675990995324469~4727525870",
-    "ios_app_id": "ca-app-pub-6675990995324469~4727525870",
+    "ios_app_id": "ca-app-pub-6675990995324469~9752621844",
     "user_tracking_usage_description": "This identifier will be used to deliver personalized ads to you.",
     "sk_ad_network_items": [
       "cstr6suwn9.skadnetwork",

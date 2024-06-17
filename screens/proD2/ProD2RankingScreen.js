@@ -2,12 +2,13 @@ import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { GlobalContext } from '../../contexts/GlobalContext'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 
 const { width, height } = Dimensions.get('window')
 
 const ProD2RankingScreen = ({navigation, route}) => {
 
-    const { isLoading, setIsLoading } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
 
     const [rankings, setRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -35,12 +36,9 @@ const ProD2RankingScreen = ({navigation, route}) => {
         .then(data => {
             setRankings([...data.response[0]])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement : '+JSON.stringify(err))
-            console.log(err);
+            alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-
         });
 
     }
@@ -183,6 +181,11 @@ const ProD2RankingScreen = ({navigation, route}) => {
 
                 <View style={{height: 50}}/>
             </ScrollView>
+
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
         </View>
     )
 }

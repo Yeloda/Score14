@@ -6,13 +6,14 @@ import { GlobalContext } from '../../contexts/GlobalContext'
 import { Feather } from '@expo/vector-icons'
 import SwitchSelector from "react-native-switch-selector";
 import { useFocusEffect } from '@react-navigation/native'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 
 const { width, height } = Dimensions.get('window')
 
 const EuroRankingScreen = ({navigation, route}) => {
 
-    const { firstPressFootball, setFirstPressFootball, isLoading, setIsLoading } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
 
     const [tousRankings, setTousRankings] = useState([])
     const [aRankings, setARankings] = useState([])
@@ -27,14 +28,6 @@ const EuroRankingScreen = ({navigation, route}) => {
     const [isRefreshing, setIsRefreshing] = useState(false)
 
     const [ordre, setOrdre] = useState('tout')
-
-    useFocusEffect(
-        React.useCallback(() => {
-            if(firstPressFootball){
-                setFirstPressFootball(false)
-            }
-        }, [])
-    );
 
     useEffect(() => {
         getRanks(false)
@@ -822,6 +815,11 @@ const EuroRankingScreen = ({navigation, route}) => {
 
                 <View style={{height: 50}}/>
             </ScrollView>
+
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
         </View>
     )
 }

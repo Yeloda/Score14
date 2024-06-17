@@ -3,24 +3,17 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { GlobalContext } from '../../contexts/GlobalContext'
 import { useFocusEffect } from '@react-navigation/native'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 
 const { width, height } = Dimensions.get('window')
 
 const BasketRankingScreen = ({navigation, route}) => {
 
-    const { firstPressBasket, setFirstPressBasket, isLoading, setIsLoading, interstitial } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
 
     const [rankingsEst, setRankingsEst] = useState([])
     const [rankingsOuest, setRankingsOuest] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
-
-    useFocusEffect(
-        React.useCallback(() => {
-            if(firstPressBasket){
-                setFirstPressBasket(false)
-            }
-        }, [])
-    );
 
     useEffect(() => {
         getRanks(false)
@@ -299,6 +292,11 @@ const BasketRankingScreen = ({navigation, route}) => {
 
                 <View style={{height: 50}}/>
             </ScrollView>
+
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
         </View>
     )
 }

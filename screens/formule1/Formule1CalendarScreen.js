@@ -5,10 +5,11 @@ import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarStrip from 'react-native-calendar-strip';
 import { GlobalContext } from '../../contexts/GlobalContext';
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const Formule1CalendarScreen = ({navigation, route}) => {
 
-    const { firstFormule1Ad, setFirstFormule1Ad, interstitial } = useContext(GlobalContext);
+    const { firstFormule1Ad, setFirstFormule1Ad, interstitial, adBannerId } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -34,8 +35,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                 data.response.sort((a, b) => a.date > b.date ? 1 : -1)
                 setListMatches([...data.response])
                 setIsLoading(false)
-            })
-            .catch(err => {
+            }).catch(err => {
                 console.log(err);
                 setIsLoading(false)
             });
@@ -59,7 +59,6 @@ const Formule1CalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(JSON.stringify(data.response));
             data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListMatches([...data.response])
         }).catch(err => {
@@ -83,8 +82,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
             data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListMatches([...data.response])
             setIsRefreshing(false)
-        })
-        .catch(err => {
+        }).catch(err => {
             console.log(err);
             setIsRefreshing(false)
         });
@@ -199,6 +197,10 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                 <View style={{height: 50}}/>
             </ScrollView>
 
+            <BannerAd
+                unitId={adBannerId} 
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+            />
         </View>
     )
 }

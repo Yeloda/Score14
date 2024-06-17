@@ -16,7 +16,7 @@ const CustomDrawer = props => {
                     style={{padding: 20}}
                 >
                     <Image
-                        source={require('../assets/logo_3.png')}
+                        source={require('../assets/logo_avec_texte.png')}
                         style={{height: 100, width: 100, borderRadius: 10, marginBottom: 10,alignSelf:'center',}}
                     />
 

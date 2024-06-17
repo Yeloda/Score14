@@ -25,6 +25,7 @@ import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile
 import { Platform } from 'react-native';
 
 const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8021711542' : 'ca-app-pub-6675990995324469/6316225123';
+const adBannerId = __DEV__ ? TestIds.BANNER : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8824862606' : 'bannerca-app-pub-6675990995324469/3329332651';
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
@@ -37,9 +38,6 @@ export default function App() {
     const [firstLigue1Ad, setFirstLigue1Ad] = useState(true)
     const [firstBasketAd, setFirstBasketAd] = useState(true)
     const [firstFormule1Ad, setFirstFormule1Ad] = useState(true)
-
-    const [firstPressBasket, setFirstPressBasket] = useState(true)
-    const [firstPressFootball, setFirstPressFootball] = useState(true)
 
     useEffect(() => {
         checkAds()
@@ -68,18 +66,7 @@ export default function App() {
 
             const adapterStatuses = mobileAds().initialize()
         }
-    }, [])
-
-    useEffect(() => {
-        if(!firstPressBasket){
-            interstitial.show();
-        }
-        if(!firstPressFootball){
-            interstitial.show();
-        }
-    }, [firstPressBasket, firstPressFootball])
-
-    
+    }, [])   
     
 
     return(
@@ -102,10 +89,7 @@ export default function App() {
                         setFirstFormule1Ad,
                         firstBasketAd,
                         setFirstBasketAd,
-                        firstPressFootball,
-                        setFirstPressFootball,
-                        firstPressBasket,
-                        setFirstPressBasket
+                        adBannerId
                     }}>
                         <AppNavigator />
                     </GlobalContext.Provider>
