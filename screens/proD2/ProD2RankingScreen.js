@@ -37,6 +37,7 @@ const ProD2RankingScreen = ({navigation, route}) => {
             setRankings([...data.response[0]])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
+            console.log(err);
             alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });

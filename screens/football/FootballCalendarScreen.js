@@ -34,6 +34,8 @@ const FootballCalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+
             setListMatches([...data.response])
             setIsLoading(false)
         }).catch(err => {
@@ -50,6 +52,8 @@ const FootballCalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+
             setListMatchesChampion([...data.response])
             setIsLoading(false)
         }).catch(err => {
@@ -75,6 +79,7 @@ const FootballCalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
         }).catch(err => {
             console.log(err);
@@ -89,6 +94,7 @@ const FootballCalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatchesChampion([...data.response])
         }).catch(err => {
             console.log(err);
@@ -108,6 +114,7 @@ const FootballCalendarScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
             setIsRefreshing(false)
         }).catch(err => {
@@ -123,7 +130,8 @@ const FootballCalendarScreen = ({navigation, route}) => {
             }
         })
         .then(response => response.json())
-        .then(data => {            
+        .then(data => {          
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)  
             setListMatchesChampion([...data.response])
             setIsRefreshing(false)
         }).catch(err => {

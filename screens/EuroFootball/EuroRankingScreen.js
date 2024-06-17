@@ -50,14 +50,16 @@ const EuroRankingScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            setTousRankings([...data.response[0].league.standings])
-            setARankings([...data.response[0].league.standings[0]])
-            setBRankings([...data.response[0].league.standings[1]])
-            setCRankings([...data.response[0].league.standings[2]])
-            setDRankings([...data.response[0].league.standings[3]])
-            setERankings([...data.response[0].league.standings[4]])
-            setFRankings([...data.response[0].league.standings[5]])
-
+            console.log(data.response);
+            if(data.response[0]){
+                setTousRankings([...data.response[0].league.standings])
+                setARankings([...data.response[0].league.standings[0]])
+                setBRankings([...data.response[0].league.standings[1]])
+                setCRankings([...data.response[0].league.standings[2]])
+                setDRankings([...data.response[0].league.standings[3]])
+                setERankings([...data.response[0].league.standings[4]])
+                setFRankings([...data.response[0].league.standings[5]])
+            }
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
             alert('Une erreur s\'est produite pendant le chargement : ')

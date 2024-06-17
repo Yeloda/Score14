@@ -23,7 +23,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
             setIsLoading(true)
             const today = moment().format('YYYY-MM-DD')
 
-            fetch("https://v1.formula-1.api-sports.io/races?competition=23&season=2023&date="+today, {
+            fetch("https://v1.formula-1.api-sports.io/races?season=2024&date="+today, {
                 "method": "GET",
                 "headers": {
                     "x-rapidapi-host": "v1.formula-1.api-sports.io",
@@ -70,7 +70,7 @@ const Formule1CalendarScreen = ({navigation, route}) => {
         setIsRefreshing(true)
         const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v1.formula-1.api-sports.io/races?competition=23&season=2023&date="+searchDate, {
+        fetch("https://v1.formula-1.api-sports.io/races?season=2024&date="+searchDate, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.formula-1.api-sports.io",

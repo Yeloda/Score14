@@ -25,7 +25,7 @@ import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile
 import { Platform } from 'react-native';
 
 const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8021711542' : 'ca-app-pub-6675990995324469/6316225123';
-const adBannerId = __DEV__ ? TestIds.BANNER : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8824862606' : 'bannerca-app-pub-6675990995324469/3329332651';
+const adBannerId = __DEV__ ? TestIds.BANNER : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8824862606' : 'ca-app-pub-6675990995324469/3329332651';
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
