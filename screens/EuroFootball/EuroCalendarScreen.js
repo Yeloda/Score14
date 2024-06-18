@@ -18,13 +18,65 @@ const EuroCalendarScreen = ({navigation, route}) => {
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
 
 
+    // useEffect(() => {
+    //     getMatches(false)
+    // }, [])
+
+    // async function getMatches(doRefresh){
+    //     console.log(doRefresh);
+    //     doRefresh ? setIsRefreshing(true) : setIsLoading(true)
+
+    //     setIsLoading(true)
+    //     const today = moment().format('YYYY-MM-DD')
+
+    //     fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+today, {
+    //         "method": "GET",
+    //         "headers": {
+    //             "x-rapidapi-host": "v3.football.api-sports.io",
+    //             "x-rapidapi-key": process.env.API_KEY
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+    //         setListMatches([...data.response])
+    //         doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+    //     }).catch(err => {
+    //         console.log(err);
+    //         doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+    //     });
+    // }
+
+    // const fetchDateMatches = async (date) => {
+    //     if(firstLigue1Ad){
+    //         setFirstLigue1Ad(false)
+    //         interstitial.show();
+    //     }
+    //     setSelectedDate(date)
+    //     const searchDate = moment(date).format('YYYY-MM-DD')
+
+    //     fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+searchDate, {
+    //         "method": "GET",
+    //         "headers": {
+    //             "x-rapidapi-host": "v3.football.api-sports.io",
+    //             "x-rapidapi-key": process.env.API_KEY
+    //         }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+    //         setListMatches([...data.response])
+    //     }).catch(err => {
+    //         console.log(err);
+    //     });
+    // }
+
+
     useEffect(() => {
-        getMatches(false)
+        getMatches()
     }, [])
-
-    async function getMatches(doRefresh){
-        doRefresh ? setIsRefreshing(true) : setIsLoading(true)
-
+        
+    async function getMatches(){
         setIsLoading(true)
         const today = moment().format('YYYY-MM-DD')
 
@@ -38,11 +90,12 @@ const EuroCalendarScreen = ({navigation, route}) => {
         .then(response => response.json())
         .then(data => {
             data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+
             setListMatches([...data.response])
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            setIsLoading(false)
         }).catch(err => {
             console.log(err);
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            setIsLoading(false)
         });
     }
 
@@ -66,6 +119,28 @@ const EuroCalendarScreen = ({navigation, route}) => {
             data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
         }).catch(err => {
+            console.log(err);
+        });
+    }
+
+    const onRefresh = async () => {
+        setIsRefreshing(true)
+        const searchDate = moment(selectedDate).format('YYYY-MM-DD')
+
+        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+searchDate, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "v3.football.api-sports.io",
+                "x-rapidapi-key": process.env.API_KEY
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+            setListMatches([...data.response])
+            setIsRefreshing(false)
+        }).catch(err => {
+            setIsRefreshing(false)
             console.log(err);
         });
     }
@@ -115,7 +190,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                 refreshControl={
                     <RefreshControl 
                         refreshing={isRefreshing} 
-                        onRefresh={() => getMatches(true)} 
+                        onRefresh={onRefresh} 
                     />
                 }
             >
