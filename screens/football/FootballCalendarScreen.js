@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const FootballCalendarScreen = ({navigation, route}) => {
 
-    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId } = useContext(GlobalContext);
+    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [listMatchesChampion, setListMatchesChampion] = useState([])
@@ -189,7 +189,9 @@ const FootballCalendarScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>
+                            {isFrench ? 'Aucun match aujourd\'hui' : 'No matches today'}
+                        </Text>
                     </View>
                 ) : (
                     <>

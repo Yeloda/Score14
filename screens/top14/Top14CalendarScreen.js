@@ -4,12 +4,12 @@ import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text,
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import CalendarStrip from 'react-native-calendar-strip';
-import { GlobalContext } from '../contexts/GlobalContext';
+import { GlobalContext } from '../../contexts/GlobalContext';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
-const MapScreen = ({navigation, route}) => {
+const Top14CalendarScreen = ({navigation, route}) => {
 
-    const { firstAd, setFirstAd, interstitial, adBannerId } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [listMatchesChampion, setListMatchesChampion] = useState([])
@@ -179,7 +179,9 @@ const MapScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : (listMatches.length == 0 && listMatchesChampion.length == 0) ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>
+                            {isFrench ? 'Aucun match aujourd\'hui' : 'No matches today'}
+                        </Text>
                     </View>
                 ) : (
                     <>
@@ -209,16 +211,18 @@ const MapScreen = ({navigation, route}) => {
                                     source={{uri: listMatches[0].league.logo}}
                                 />
                                 <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
-                                    {listMatches[0].week == 'Quarter-finals' ? (
+                                    {isFrench && listMatches[0].week == 'Quarter-finals' ? (
                                         <Text style={{}}>- {moment(listMatches[0].date).format('LL')} - Barrages</Text>
-                                    ) : listMatches[0].week == 'Semi-Finals' ? (
+                                    ) : isFrench && listMatches[0].week == 'Semi-Finals' ? (
                                         <Text style={{}}>- {moment(listMatches[0].date).format('LL')} - Demi-Finale</Text>
-                                    ) : listMatches[0].week == 'Final' && listMatches.length == 2 ? (
+                                    ) : isFrench && listMatches[0].week == 'Final' && listMatches.length == 2 ? (
                                         <Text style={{}}> Promotion / Relégation & Barrages</Text>
-                                    ) : listMatches[0].week == 'Final' && listMatches.length == 1 ? (
+                                    ) : isFrench && listMatches[0].week == 'Final' && listMatches.length == 1 ? (
                                         <Text style={{}}>- {moment(listMatches[0].date).format('LL')} - Finale</Text>
-                                    ) : (
+                                    ) : isFrench ? (
                                         <Text style={{}}>- {moment(listMatches[0].date).format('LL')} - Journée {listMatches[0].week}</Text>
+                                    ) : (
+                                        <Text style={{}}>- {moment(listMatches[0].date).format('LL')} - Day {listMatches[0].week}</Text>
                                     )}
                                 </Text>
                             </View>
@@ -378,7 +382,7 @@ const MapScreen = ({navigation, route}) => {
     )
 }
 
-export default MapScreen
+export default Top14CalendarScreen
 
 const styles = StyleSheet.create({
     elevate: {

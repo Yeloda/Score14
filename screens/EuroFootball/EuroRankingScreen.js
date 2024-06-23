@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window')
 
 const EuroRankingScreen = ({navigation, route}) => {
 
-    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId, isFrench } = useContext(GlobalContext);
 
     const [tousRankings, setTousRankings] = useState([])
     const [aRankings, setARankings] = useState([])
@@ -114,40 +114,39 @@ const EuroRankingScreen = ({navigation, route}) => {
 
                             {elt[0].group == 'Ranking of third-placed teams' ? (
                                 <View style={{backgroundColor: '#cfcfcf',padding: 15,marginTop: 20,}}>
-                                    <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>Classement des Meilleurs Troisième</Text>
+                                    <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>
+                                        {isFrench ? 'Classement des Meilleurs Troisième' : 'Ranking of third-placed teams'}
+                                    </Text>
                                 </View>
                             ) : (
                                 <View style={{backgroundColor: '#cfcfcf',padding: 15, flexDirection:'row',marginTop: 10,}}>
-                                    {/* <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{elt[0].group}</Text> */}
-                                    {elt[0].group != 'Ranking of third-placed teams' && (
-                                        <View key={Math.random()} style={{flexDirection:'row',alignItems:'flex-end',}}>
+                                    <View key={Math.random()} style={{flexDirection:'row',alignItems:'flex-end',}}>
 
-                                            <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3,width: '25%'}}>
-                                                <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{elt[0].group}</Text>
-                                            </View>
-
-                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '6%'}} />
-
-                                            <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
-                                            </View>
-                                            <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
-                                            </View>
-                                            <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
-                                            </View>
-                                            <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
-                                            </View>
-                                            <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
-                                            </View>
-                                            <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>PTS</Text>
-                                            </View>
+                                        <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3,width: '25%'}}>
+                                            <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{elt[0].group}</Text>
                                         </View>
-                                    )}
+
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '6%'}} />
+
+                                        <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
+                                        </View>
+                                        <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
+                                        </View>
+                                        <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
+                                        </View>
+                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
+                                        </View>
+                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
+                                        </View>
+                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                            <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>PTS</Text>
+                                        </View>
+                                    </View>
                                 </View>
                             )}
 
@@ -292,16 +291,16 @@ const EuroRankingScreen = ({navigation, route}) => {
 
 
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -379,18 +378,17 @@ const EuroRankingScreen = ({navigation, route}) => {
 
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3, width: '6%',}} />
 
-
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -470,16 +468,16 @@ const EuroRankingScreen = ({navigation, route}) => {
 
 
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -559,16 +557,16 @@ const EuroRankingScreen = ({navigation, route}) => {
 
 
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -648,16 +646,16 @@ const EuroRankingScreen = ({navigation, route}) => {
 
 
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -737,16 +735,16 @@ const EuroRankingScreen = ({navigation, route}) => {
 
 
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                             </View>
                             <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                             </View>
                             <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                                <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                             </View>
                             <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>

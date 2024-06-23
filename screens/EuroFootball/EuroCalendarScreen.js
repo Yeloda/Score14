@@ -9,68 +9,12 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const EuroCalendarScreen = ({navigation, route}) => {
 
-    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId } = useContext(GlobalContext);
+    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
-    // const [listMatches, setListMatches] = useState([{"fixture":{"id":1189846,"referee":"Artur Soares Dias, Portugal","timezone":"UTC","date":"2024-06-16T13:00:00+00:00","timestamp":1718542800,"periods":{"first":1718542800,"second":1718546400},"venue":{"id":720,"name":"Volksparkstadion","city":"Hamburg"},"status":{"long":"Match Finished","short":"FT","elapsed":90}},"league":{"id":4,"name":"Euro Championship","country":"World","logo":"https://media.api-sports.io/football/leagues/4.png","flag":null,"season":2024,"round":"Group D - 1"},"teams":{"home":{"id":24,"name":"Poland","logo":"https://media.api-sports.io/football/teams/24.png","winner":false},"away":{"id":1118,"name":"Netherlands","logo":"https://media.api-sports.io/football/teams/1118.png","winner":true}},"goals":{"home":1,"away":2},"score":{"halftime":{"home":1,"away":1},"fulltime":{"home":1,"away":2},"extratime":{"home":null,"away":null},"penalty":{"home":null,"away":null}}},{"fixture":{"id":1145513,"referee":"Sandro Schärer, Switzerland","timezone":"UTC","date":"2024-06-16T16:00:00+00:00","timestamp":1718553600,"periods":{"first":1718553600,"second":1718557200},"venue":{"id":20739,"name":"Stuttgart Arena","city":"Stuttgart"},"status":{"long":"Match Finished","short":"FT","elapsed":90}},"league":{"id":4,"name":"Euro Championship","country":"World","logo":"https://media.api-sports.io/football/leagues/4.png","flag":null,"season":2024,"round":"Group C - 1"},"teams":{"home":{"id":1091,"name":"Slovenia","logo":"https://media.api-sports.io/football/teams/1091.png","winner":null},"away":{"id":21,"name":"Denmark","logo":"https://media.api-sports.io/football/teams/21.png","winner":null}},"goals":{"home":1,"away":1},"score":{"halftime":{"home":0,"away":1},"fulltime":{"home":1,"away":1},"extratime":{"home":null,"away":null},"penalty":{"home":null,"away":null}}},{"fixture":{"id":1145514,"referee":"Daniele Orsato, Italy","timezone":"UTC","date":"2024-06-16T19:00:00+00:00","timestamp":1718564400,"periods":{"first":1718564400,"second":1718568000},"venue":{"id":20738,"name":"Arena AufSchalke","city":"Gelsenkirchen"},"status":{"long":"Match Finished","short":"FT","elapsed":90}},"league":{"id":4,"name":"Euro Championship","country":"World","logo":"https://media.api-sports.io/football/leagues/4.png","flag":null,"season":2024,"round":"Group C - 1"},"teams":{"home":{"id":14,"name":"Serbia","logo":"https://media.api-sports.io/football/teams/14.png","winner":false},"away":{"id":10,"name":"England","logo":"https://media.api-sports.io/football/teams/10.png","winner":true}},"goals":{"home":0,"away":1},"score":{"halftime":{"home":0,"away":1},"fulltime":{"home":0,"away":1},"extratime":{"home":null,"away":null},"penalty":{"home":null,"away":null}}}])
     const [isLoading, setIsLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
-
-
-    // useEffect(() => {
-    //     getMatches(false)
-    // }, [])
-
-    // async function getMatches(doRefresh){
-    //     console.log(doRefresh);
-    //     doRefresh ? setIsRefreshing(true) : setIsLoading(true)
-
-    //     setIsLoading(true)
-    //     const today = moment().format('YYYY-MM-DD')
-
-    //     fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+today, {
-    //         "method": "GET",
-    //         "headers": {
-    //             "x-rapidapi-host": "v3.football.api-sports.io",
-    //             "x-rapidapi-key": process.env.API_KEY
-    //         }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
-    //         setListMatches([...data.response])
-    //         doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-    //     }).catch(err => {
-    //         console.log(err);
-    //         doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-    //     });
-    // }
-
-    // const fetchDateMatches = async (date) => {
-    //     if(firstLigue1Ad){
-    //         setFirstLigue1Ad(false)
-    //         interstitial.show();
-    //     }
-    //     setSelectedDate(date)
-    //     const searchDate = moment(date).format('YYYY-MM-DD')
-
-    //     fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+searchDate, {
-    //         "method": "GET",
-    //         "headers": {
-    //             "x-rapidapi-host": "v3.football.api-sports.io",
-    //             "x-rapidapi-key": process.env.API_KEY
-    //         }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
-    //         setListMatches([...data.response])
-    //     }).catch(err => {
-    //         console.log(err);
-    //     });
-    // }
-
 
     useEffect(() => {
         getMatches()
@@ -198,7 +142,9 @@ const EuroCalendarScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>
+                            {isFrench ? 'Aucun match aujourd\'hui' : 'No matches today'}
+                        </Text>
                     </View>
                 ) : (
                     <>

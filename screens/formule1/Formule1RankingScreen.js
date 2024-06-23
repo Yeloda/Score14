@@ -77,6 +77,12 @@ const Formule1RankingScreen = ({navigation, route}) => {
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
 
+                <Image
+                    style={{width: 50,height: 30,marginLeft: 5,borderRadius: 10,}}
+                    resizeMode='contain'
+                    source={require('../../assets/F1-logo.png')}
+                />
+
                 <View style={{width: '14%',justifyContent:'center',alignItems:'center',}}>
                     <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>Pts</Text>
                 </View>

@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const Formule1CalendarScreen = ({navigation, route}) => {
 
-    const { firstFormule1Ad, setFirstFormule1Ad, interstitial, adBannerId } = useContext(GlobalContext);
+    const { firstFormule1Ad, setFirstFormule1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -131,7 +131,9 @@ const Formule1CalendarScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucune course aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>
+                            {isFrench ? 'Aucune course aujourd\'hui' : 'No races today'}
+                        </Text>
                     </View>
                 ) : (
                     <>

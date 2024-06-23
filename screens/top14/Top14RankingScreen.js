@@ -1,14 +1,14 @@
 import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { GlobalContext } from '../contexts/GlobalContext'
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+import { GlobalContext } from '../../contexts/GlobalContext'
 
 const { width, height } = Dimensions.get('window')
 
-const RankingScreen = ({navigation, route}) => {
+const Top14RankingScreen = ({navigation, route}) => {
 
-    const { isLoading, setIsLoading, adBannerId } = useContext(GlobalContext);
+    const { isLoading, setIsLoading, adBannerId, isFrench } = useContext(GlobalContext);
 
     const [rankings, setRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -62,16 +62,16 @@ const RankingScreen = ({navigation, route}) => {
                     />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>J</Text>
+                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                 </View>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>V</Text>
+                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                 </View>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>N</Text>
+                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                 </View>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>D</Text>
+                    <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                 </View>
                 <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                     <Text style={{color:'white',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
@@ -189,6 +189,6 @@ const RankingScreen = ({navigation, route}) => {
     )
 }
 
-export default RankingScreen
+export default Top14RankingScreen
 
 const styles = StyleSheet.create({})

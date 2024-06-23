@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const ProD2CalendarScreen = ({navigation, route}) => {
 
-    const { firstProD2Ad, setFirstProD2Ad, interstitial, adBannerId } = useContext(GlobalContext);
+    const { firstProD2Ad, setFirstProD2Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -133,7 +133,9 @@ const ProD2CalendarScreen = ({navigation, route}) => {
                     <ActivityIndicator style={{marginTop: 50,}}/>
                 ) : listMatches.length == 0 ? (
                     <View style={{marginTop: 10,}}>
-                        <Text style={{textAlign: 'center',}}>Aucun match aujourd'hui</Text>
+                        <Text style={{textAlign: 'center',}}>
+                            {isFrench ? 'Aucun match aujourd\'hui' : 'No matches today'}
+                        </Text>
                     </View>
                 ) : (
                     <>

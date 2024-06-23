@@ -44,7 +44,15 @@
                 "AppTrackingTransparency"
               ]
             }
-          ]
+        ],
+        [
+            "expo-build-properties",
+            {
+              "ios": {
+                "useFrameworks": "static"
+              }
+            }
+        ]
     ]
   },
   "react-native-google-mobile-ads": {

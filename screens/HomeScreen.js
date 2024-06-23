@@ -1,21 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import * as SplashScreen from 'expo-splash-screen';
 import CustomDrawer from '../components/CustomDrawer';
-import BottomTabsNavigator from '../navigation/BottomTabsNavigator'
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons'; 
+import { AntDesign, FontAwesome5, Ionicons, MaterialIcons } from '@expo/vector-icons'; 
 import FootballNavigator from '../navigation/FootballNavigator';
 import ProD2Navigator from '../navigation/ProD2Navigator';
 import BasketNavigator from '../navigation/BasketNavigator';
 import Formule1Navigator from '../navigation/Formule1Navigator';
 import EuroNavigator from '../navigation/EuroNavigator';
+import ChooseSportScreen from './ChooseSportScreen';
+import Top14Navigator from '../navigation/Top14Navigator';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const Drawer = createDrawerNavigator();
 
 const HomeScreen = ({ navigation, route }) => {
+
+    const { isFrench } = useContext(GlobalContext);
 
     useEffect(() => {
         hideSplashScreen()
@@ -49,8 +53,21 @@ const HomeScreen = ({ navigation, route }) => {
             }}
         >
             <Drawer.Screen
+                name={isFrench ? 'Accueil' : 'Home'}
+                component={ChooseSportScreen}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <AntDesign name="home" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
                 name="Top 14"
-                component={BottomTabsNavigator}
+                component={Top14Navigator}
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
@@ -63,7 +80,7 @@ const HomeScreen = ({ navigation, route }) => {
             />
             
             <Drawer.Screen
-                name="Pro D2"
+                name="ProD2"
                 component={ProD2Navigator}
                 options={{
                     headerShown: false,
@@ -116,7 +133,7 @@ const HomeScreen = ({ navigation, route }) => {
             />
 
             <Drawer.Screen
-                name="Formule 1"
+                name={isFrench ? 'Formule 1' : 'Formula 1'}
                 component={Formule1Navigator}
                 options={{
                     headerShown: false,
@@ -127,6 +144,19 @@ const HomeScreen = ({ navigation, route }) => {
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
             />
+
+            {/* <Drawer.Screen
+                name={isFrench ? 'Réglages' : 'Settings'}
+                component={Formule1Navigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <MaterialIcons name="sports-motorsports" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            /> */}
         </Drawer.Navigator>
     )
 };

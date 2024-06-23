@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Platform } from 'react-native';
 
 import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
 
-import RankingScreen from '../screens/RankingScreen';
-import CalendarScreen from '../screens/CalendarScreen';
 import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import FootballRankingScreen from '../screens/football/FootballRankingScreen';
 import FootballCalendarScreen from '../screens/football/FootballCalendarScreen';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator();
 
 const FootballNavigator = ({ navigation,route }) => {
+
+    const { isFrench } = useContext(GlobalContext);
+
     return (
         <Navigator
             activeColor="white"
@@ -20,17 +22,17 @@ const FootballNavigator = ({ navigation,route }) => {
             shifting={false}
             theme={{colors: {secondaryContainer: '#009ba3'}}}
         >
-            <Screen name='Classement' component={FootballRankingScreen} 
-                options={{
-                    tabBarIcon: ({size,focused,color}) => {
-                        return <MaterialIcons name="leaderboard" size={24} color={color} />
-                    },
-                }}
-            />
-            <Screen name='Calendrier' component={FootballCalendarScreen}
+            <Screen name={isFrench ? 'Calendrier' : 'Calendar'} component={FootballCalendarScreen}
                 options={{
                     tabBarIcon: ({size,focused,color}) => {
                         return <AntDesign name="calendar" size={24} color={color} />
+                    },
+                }}
+            />
+            <Screen name={isFrench ? 'Classement' : 'Ranking'} component={FootballRankingScreen} 
+                options={{
+                    tabBarIcon: ({size,focused,color}) => {
+                        return <MaterialIcons name="leaderboard" size={24} color={color} />
                     },
                 }}
             />

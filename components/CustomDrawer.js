@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, ImageBackground, Image, TouchableOpacity, Alert, Linking } from 'react-native';
 
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 
 import { BlueSkyIcon, LinkedInIcon, NewTwitterIcon } from './icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const CustomDrawer = props => {
+
+    const { isFrench } = useContext(GlobalContext);
 
     return (
         <View style={{flex: 1}}>
@@ -23,7 +26,9 @@ const CustomDrawer = props => {
                     <Text style={{color: '#fff',fontSize: 18,marginBottom: 5,}}>Score14</Text>
 
                     <View style={{flexDirection: 'row'}}>
-                        <Text style={{color: '#fff',marginRight: 5,}}>Votre Hub Sportif Complet !</Text>
+                        <Text style={{color: '#fff',marginRight: 5,}}>
+                            {isFrench ? 'Votre Hub Sportif Complet !' : 'Your Complete Sports Hub!'}
+                        </Text>
                     </View>
                 </ImageBackground>
 
