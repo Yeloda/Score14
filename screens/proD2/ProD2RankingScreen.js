@@ -25,7 +25,7 @@ const ProD2RankingScreen = ({navigation, route}) => {
     async function getRanks(doRefresh){
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v1.rugby.api-sports.io/standings?league=17&season=2023", {
+        fetch("https://v1.rugby.api-sports.io/standings?league=17&season=2024", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
@@ -34,11 +34,28 @@ const ProD2RankingScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            setRankings([...data.response[0]])
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            if(data.response.length > 0){
+                setRankings([...data.response[0]])
+                doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            }else{
+                fetch("https://v1.rugby.api-sports.io/standings?league=17&season=2023", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "v1.rugby.api-sports.io",
+                        "x-rapidapi-key": process.env.API_KEY
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setRankings([...data.response[0]])
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                }).catch(err => {
+                    console.log(err);
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                });
+            }
         }).catch(err => {
             console.log(err);
-            alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
 
@@ -93,6 +110,9 @@ const ProD2RankingScreen = ({navigation, route}) => {
                     switch (e.team.name) {
                         case "Provence Rugby":
                             teamName = "PR"
+                            break;
+                        case "US Oyonnax":
+                            teamName = "OR"
                             break;
                         case "Vannes":
                             teamName = "RCV"

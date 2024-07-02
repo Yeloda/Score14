@@ -26,7 +26,7 @@ const FootballRankingScreen = ({navigation, route}) => {
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v3.football.api-sports.io/standings?league=61&season=2023", {
+        fetch("https://v3.football.api-sports.io/standings?league=61&season=2024", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v3.football.api-sports.io",
@@ -35,10 +35,26 @@ const FootballRankingScreen = ({navigation, route}) => {
         })
         .then(response => response.json())
         .then(data => {
-            setFootballRankings([...data.response[0].league.standings[0]])
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            if(data.response.length > 0){
+                setFootballRankings([...data.response[0].league.standings[0]])
+                doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            }else{
+                fetch("https://v3.football.api-sports.io/standings?league=61&season=2023", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "v3.football.api-sports.io",
+                        "x-rapidapi-key": process.env.API_KEY
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setFootballRankings([...data.response[0].league.standings[0]])
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                }).catch(err => {
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                });
+            }
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement')
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
 
@@ -144,6 +160,12 @@ const FootballRankingScreen = ({navigation, route}) => {
                             break;
                         case "Clermont Foot":
                             teamName = "CLE"
+                            break;
+                        case "Auxerre":
+                            teamName = "AUX"
+                            break;
+                        case "Angers":
+                            teamName = "ANG"
                             break;
 
                         default:

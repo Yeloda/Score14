@@ -36,15 +36,22 @@ export default function App() {
 
     const [firstAd, setFirstAd] = useState(true)
     const [firstProD2Ad, setFirstProD2Ad] = useState(true)
+    const [firstPremierLeagueAd, setFirstPremierLeagueAd] = useState(true)
     const [firstLigue1Ad, setFirstLigue1Ad] = useState(true)
     const [firstBasketAd, setFirstBasketAd] = useState(true)
     const [firstFormule1Ad, setFirstFormule1Ad] = useState(true)
+
+    const [euroAd, setEuroAd] = useState(true)
+    const [championsLeagueAd, setChampionsLeagueAd] = useState(true)
+    const [championsCupAd, setChampionsCupAd] = useState(true)
+    const [allCalendarAd, setAllCalendarAd] = useState(true)
+
     const [isFrench, setIsFrench] = useState(false)
 
 
     useEffect(() => {
         checkAds()
-        // checkLocale()
+        checkLocale()
 
         const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
             setIsLoading(false);
@@ -102,7 +109,17 @@ export default function App() {
                         setFirstBasketAd,
                         adBannerId,
                         isFrench, 
-                        setIsFrench
+                        setIsFrench,
+                        firstPremierLeagueAd, 
+                        setFirstPremierLeagueAd,
+                        allCalendarAd, 
+                        setAllCalendarAd,
+                        euroAd, 
+                        setEuroAd,
+                        championsLeagueAd, 
+                        setChampionsLeagueAd,
+                        championsCupAd, 
+                        setChampionsCupAd
                     }}>
                         <AppNavigator />
                     </GlobalContext.Provider>

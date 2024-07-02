@@ -1,18 +1,18 @@
 import { Feather } from '@expo/vector-icons'
 import React, { useContext, useEffect, useState } from 'react'
 import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 import { GlobalContext } from '../../contexts/GlobalContext'
+import { useFocusEffect } from '@react-navigation/native'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 
 const { width, height } = Dimensions.get('window')
 
-const Top14RankingScreen = ({navigation, route}) => {
+const PremierLeagueRankingScreen = ({navigation, route}) => {
 
     const { isLoading, setIsLoading, adBannerId, isFrench } = useContext(GlobalContext);
 
-    const [rankings, setRankings] = useState([])
+    const [footballRankings, setFootballRankings] = useState([])
     const [isRefreshing, setIsRefreshing] = useState(false)
-
 
     useEffect(() => {
         getRanks(false)
@@ -21,45 +21,26 @@ const Top14RankingScreen = ({navigation, route}) => {
     const onRefresh = async () => {
         getRanks(true)
     }
-        
+
     async function getRanks(doRefresh){
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2024", {
+        fetch("https://v3.football.api-sports.io/standings?league=39&season=2024", {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.rugby.api-sports.io",
+                "x-rapidapi-host": "v3.football.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
-            if(data.response.length > 0){
-                setRankings([...data.response[0]])
-                doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-            }else{
-                fetch("https://v1.rugby.api-sports.io/standings?league=16&season=2023", {
-                    "method": "GET",
-                    "headers": {
-                        "x-rapidapi-host": "v1.rugby.api-sports.io",
-                        "x-rapidapi-key": process.env.API_KEY
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    setRankings([...data.response[0]])
-                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-                }).catch(err => {
-                    console.log(err);
-                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
-                });
-            }
-
+            setFootballRankings([...data.response[0].league.standings[0]])
+            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
-            console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });
+
     }
 
     return (
@@ -73,9 +54,9 @@ const Top14RankingScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
                     <Image
-                        style={{width: 30,height: 30,marginLeft: 5}}
+                        style={{width: 30,height: 30,marginLeft: 5, backgroundColor: 'white',}}
                         resizeMode='contain'
-                        source={{uri: "https://media.api-sports.io/rugby/leagues/16.png"}}
+                        source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
                     />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
@@ -103,92 +84,115 @@ const Top14RankingScreen = ({navigation, route}) => {
             )}
 
             <ScrollView
-                style={{flex: 1,height: '100%',}}
-                contentContainerStyle={{flex: 1}}
                 refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             >
-                {!isLoading && rankings.map((e, index) => {
+                {!isLoading && footballRankings.map((e, index) => {
 
                     let teamName = ''
                     switch (e.team.name) {
-                        case "Stade Toulousain":
-                            teamName = "ST"
+                        case "Manchester City":
+                            teamName = "MCI"
                             break;
-                        case "Stade Francais Paris":
-                            teamName = "SFP"
+                        case "Arsenal":
+                            teamName = "ARS"
                             break;
-                        case "Bordeaux Begles":
-                            teamName = "UBB"
+                        case "Liverpool":
+                            teamName = "LIV"
                             break;
-                        case "RC Toulonnais":
-                            teamName = "RCT"
+                        case "Aston Villa":
+                            teamName = "AVL"
                             break;
-                        case "Racing 92":
-                            teamName = "R92"
+                        case "Tottenham":
+                            teamName = "TOT"
                             break;
-                        case "Stade Rochelais":
-                            teamName = "SR"
+                        case "Chelsea":
+                            teamName = "CHE"
                             break;
-                        case "Section Paloise":
-                            teamName = "SP"
+                        case "Newcastle":
+                            teamName = "NEW"
                             break;
-                        case "Castres Olympique":
-                            teamName = "CO"
+                        case "Manchester United":
+                            teamName = "MUI"
                             break;
-                        case "USA Perpignan":
-                            teamName = "USAP"
+                        case "West Ham":
+                            teamName = "WHM"
                             break;
-                        case "Clermont":
-                            teamName = "ASM"
+                        case "Crystal Palace":
+                            teamName = "CRY"
                             break;
-                        case "Aviron Bayonnais":
-                            teamName = "AB"
+                        case "Brighton":
+                            teamName = "BRI"
                             break;
-                        case "Lyon":
-                            teamName = "LOU"
+                        case "Bournemouth":
+                            teamName = "BOU"
                             break;
-                        case "Montpellier":
-                            teamName = "MHR"
+                        case "Fulham":
+                            teamName = "FUL"
                             break;
-                        case "US Oyonnax":
-                            teamName = "OR"
+                        case "Wolves":
+                            teamName = "WOL"
                             break;
-                        case "Vannes":
-                            teamName = "RCV"
+                        case "Everton":
+                            teamName = "EVE"
                             break;
-                    
+                        case "Brentford":
+                            teamName = "BRE"
+                            break;
+                        case "Nottingham Forest":
+                            teamName = "NTF"
+                            break;
+                        case "Luton":
+                            teamName = "LUT"
+                            break;
+                        case "Burnley":
+                            teamName = "BUR"
+                            break;
+                        case "Sheffield Utd":
+                            teamName = "SHE"
+                            break;
+                        case "Ipswich":
+                            teamName = "IPS"
+                            break;
+                        case "Leicester":
+                            teamName = "LEI"
+                            break;
+                        case "Southampton":
+                            teamName = "SOU"
+                            break;
+
                         default:
                             teamName = e.team.name
                             break;
                     }
 
+
                     return(
-                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: '7.12%',}}>
+                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
                                     style={{width: 28, height: 28}}
                                     resizeMode='contain'
-                                    source={{uri: e.team.logo == 'https://media.api-sports.io/rugby/teams/0.png' ? 'https://media.api-sports.io/rugby/teams/100.png' : e.team.logo}}
+                                    source={{uri: e.team.logo}}
                                 />
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -200,7 +204,6 @@ const Top14RankingScreen = ({navigation, route}) => {
                 <View style={{height: 50}}/>
             </ScrollView>
 
-
             <BannerAd
                 unitId={adBannerId} 
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
@@ -209,6 +212,6 @@ const Top14RankingScreen = ({navigation, route}) => {
     )
 }
 
-export default Top14RankingScreen
+export default PremierLeagueRankingScreen
 
 const styles = StyleSheet.create({})

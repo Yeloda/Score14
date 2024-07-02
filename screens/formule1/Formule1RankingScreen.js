@@ -33,7 +33,7 @@ const Formule1RankingScreen = ({navigation, route}) => {
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
         // PILOTES
-        fetch("https://v1.formula-1.api-sports.io/rankings/drivers?season=2023", {
+        fetch("https://v1.formula-1.api-sports.io/rankings/drivers?season=2024", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.formula-1.api-sports.io",
@@ -50,7 +50,7 @@ const Formule1RankingScreen = ({navigation, route}) => {
         });
 
         // CONSTRUCTEURS
-        fetch("https://v1.formula-1.api-sports.io/rankings/teams?season=2023", {
+        fetch("https://v1.formula-1.api-sports.io/rankings/teams?season=2024", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.formula-1.api-sports.io",

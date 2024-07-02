@@ -27,7 +27,7 @@ const BasketRankingScreen = ({navigation, route}) => {
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v1.basketball.api-sports.io/standings?league=12&season=2023-2024", {
+        fetch("https://v1.basketball.api-sports.io/standings?league=12&season=2024-2025", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "v1.rugby.api-sports.io",
@@ -52,7 +52,6 @@ const BasketRankingScreen = ({navigation, route}) => {
             setRankingsOuest([...tempOuest])
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
-            alert('Une erreur s\'est produite pendant le chargement : ')
             console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         });

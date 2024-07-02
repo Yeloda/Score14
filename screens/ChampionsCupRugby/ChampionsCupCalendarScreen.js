@@ -7,11 +7,11 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
-const BasketBallCalendarScreen = ({navigation, route}) => {
+const ChampionsCupCalendarScreen = ({navigation, route}) => {
 
-    const { firstBasketAd, setFirstBasketAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { championsCupAd, setChampionsCupAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
-    const [listMatches, setListMatches] = useState([])
+    const [listMatchesChampion, setListMatchesChampion] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'))
@@ -23,44 +23,41 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
             setIsLoading(true)
             const today = moment().format('YYYY-MM-DD')
 
-            fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+today, {
+            fetch("https://v1.rugby.api-sports.io/games?season=2023&league=54&date="+today, {
                 "method": "GET",
                 "headers": {
-                    "x-rapidapi-host": "v1.basketball.api-sports.io",
+                    "x-rapidapi-host": "v1.rugby.api-sports.io",
                     "x-rapidapi-key": process.env.API_KEY
                 }
             })
             .then(response => response.json())
             .then(data => {
-                data.response.sort((a, b) => a.date > b.date ? 1 : -1)
-                setListMatches([...data.response])
+                setListMatchesChampion([...data.response])
                 setIsLoading(false)
             }).catch(err => {
-                console.log(err);
                 setIsLoading(false)
             });
         }
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(firstBasketAd){
-            setFirstBasketAd(false)
+        if(championsCupAd){
+            setChampionsCupAd(false)
             interstitial.show();
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+searchDate, {
+        fetch("https://v1.rugby.api-sports.io/games?season=2024&league=54&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
-            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
-            setListMatches([...data.response])
+            setListMatchesChampion([...data.response])
         }).catch(err => {
             console.log(err);
         });
@@ -70,24 +67,23 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
         setIsRefreshing(true)
         const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+searchDate, {
+
+        fetch("https://v1.rugby.api-sports.io/games?season=2024&league=54&date="+searchDate, {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
-            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
-            setListMatches([...data.response])
+            setListMatchesChampion([...data.response])
             setIsRefreshing(false)
         }).catch(err => {
             console.log(err);
             setIsRefreshing(false)
         });
     }
-
 
     return (
         <View style={{flex: 1, backgroundColor: '#E6E6E6',}}>
@@ -100,9 +96,9 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
                     <Image
-                        style={{width: 30,height: 30,marginLeft: 5}}
+                        style={{width: 30,height: 30,marginLeft: 5,backgroundColor: 'white',}}
                         resizeMode='contain'
-                        source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
+                        source={{uri: "https://media.api-sports.io/rugby/leagues/54.png"}}
                     />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
@@ -135,7 +131,7 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
             >
                 { isLoading ? (
                     <ActivityIndicator style={{marginTop: 50,}}/>
-                ) : listMatches.length == 0 ? (
+                ) : listMatchesChampion.length == 0 ? (
                     <View style={{marginTop: 10,}}>
                         <Text style={{textAlign: 'center',}}>
                             {isFrench ? 'Aucun match aujourd\'hui' : 'No matches today'}
@@ -143,7 +139,7 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                     </View>
                 ) : (
                     <>
-                        {listMatches.length > 0 && (
+                        {listMatchesChampion.length > 0 && (
                             <View 
                                 style={[
                                     styles.elevate, 
@@ -166,15 +162,14 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                 <Image
                                     style={{width: 30, height: 30, borderRadius: 3,}}
                                     resizeMode='contain'
-                                    source={{uri: listMatches[0].league.logo}}
+                                    source={{uri: listMatchesChampion[0].league.logo}}
                                 />
-                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold'}}>
-                                    {listMatches[0].week}
+                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
+                                    - {moment(listMatchesChampion[0].date).format('dddd LL')}
                                 </Text>
                             </View>
                         )}
-
-                        {listMatches.map(e => {
+                        {listMatchesChampion.map(e => {
                             return(
                                 <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
                                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
@@ -187,13 +182,13 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                             />
                                         </View>
 
-                                        {(e.status.long == 'Game Finished' || e.status.long == 'After Over Time') ? (
+                                        {(e.status.long == 'Finished' || e.status.long == 'After Extra Time') ? (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
                                                 </View>
                                                 <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
                                                 </View>
                                             </View>
                                         ) : e.status.long == 'Not Started' ? (
@@ -203,10 +198,10 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                         ) : (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
                                                 </View>
                                                 <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
                                                 </View>
                                             </View>
                                         )}
@@ -239,11 +234,12 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                 unitId={adBannerId} 
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
             />
+
         </View>
     )
 }
 
-export default BasketBallCalendarScreen
+export default ChampionsCupCalendarScreen
 
 const styles = StyleSheet.create({
     elevate: {

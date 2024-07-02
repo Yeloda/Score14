@@ -7,9 +7,9 @@ import CalendarStrip from 'react-native-calendar-strip';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
-const BasketBallCalendarScreen = ({navigation, route}) => {
+const PremierLeagueCalendarScreen = ({navigation, route}) => {
 
-    const { firstBasketAd, setFirstBasketAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstPremierLeagueAd, setFirstPremierLeagueAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -18,74 +18,50 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
 
     useEffect(() => {
         getMatches()
-
-        async function getMatches(){
-            setIsLoading(true)
-            const today = moment().format('YYYY-MM-DD')
-
-            fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+today, {
-                "method": "GET",
-                "headers": {
-                    "x-rapidapi-host": "v1.basketball.api-sports.io",
-                    "x-rapidapi-key": process.env.API_KEY
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                data.response.sort((a, b) => a.date > b.date ? 1 : -1)
-                setListMatches([...data.response])
-                setIsLoading(false)
-            }).catch(err => {
-                console.log(err);
-                setIsLoading(false)
-            });
-        }
     }, [])
-    
+        
+    async function getMatches(){
+        setIsLoading(true)
+        const today = moment().format('YYYY-MM-DD')
+
+        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=39&date="+today, {"method": "GET","headers": {"x-rapidapi-host": "v3.football.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
+        .then(response => response.json())
+        .then(data => {
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
+            setListMatches([...data.response])
+            setIsLoading(false)
+        }).catch(err => setIsLoading(false));
+    }
+
     const fetchDateMatches = async (date) => {
-        if(firstBasketAd){
-            setFirstBasketAd(false)
+        if(firstPremierLeagueAd){
+            setFirstPremierLeagueAd(false)
             interstitial.show();
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+searchDate, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
+        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=39&date="+searchDate, {"method": "GET","headers": {"x-rapidapi-host": "v3.football.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
         .then(response => response.json())
         .then(data => {
-            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
-        }).catch(err => {
-            console.log(err);
-        });
+            setIsLoading(false)
+        }).catch(err => setIsLoading(false));
     }
 
     const onRefresh = async () => {
         setIsRefreshing(true)
         const searchDate = moment(selectedDate).format('YYYY-MM-DD')
 
-        fetch("https://v1.basketball.api-sports.io/games?season=2024-2025&league=12&date="+searchDate, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "v1.basketball.api-sports.io",
-                "x-rapidapi-key": process.env.API_KEY
-            }
-        })
+        // Premiere league
+        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=39&date="+searchDate, {"method": "GET","headers": {"x-rapidapi-host": "v3.football.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
         .then(response => response.json())
         .then(data => {
-            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
+            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
             setListMatches([...data.response])
             setIsRefreshing(false)
-        }).catch(err => {
-            console.log(err);
-            setIsRefreshing(false)
-        });
+        }).catch(err => setIsRefreshing(false));
     }
 
 
@@ -100,9 +76,9 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
                     <Image
-                        style={{width: 30,height: 30,marginLeft: 5}}
+                        style={{width: 30,height: 30,marginLeft: 5,backgroundColor: 'white',}}
                         resizeMode='contain'
-                        source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
+                        source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
                     />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
@@ -168,15 +144,15 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: listMatches[0].league.logo}}
                                 />
-                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold'}}>
-                                    {listMatches[0].week}
+                                <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
+                                    - Journée {listMatches[0].league.round.slice(-2)}
                                 </Text>
                             </View>
                         )}
 
                         {listMatches.map(e => {
                             return(
-                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
+                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.fixture.status.long !== 'Not Started' ? 0 : 8}}>
                                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
                                         <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
                                             <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
@@ -187,26 +163,26 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                             />
                                         </View>
 
-                                        {(e.status.long == 'Game Finished' || e.status.long == 'After Over Time') ? (
+                                        {e.fixture.status.long == 'Match Finished' ? (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
                                                 </View>
                                                 <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
                                                 </View>
                                             </View>
-                                        ) : e.status.long == 'Not Started' ? (
+                                        ) : e.fixture.status.long == 'Not Started' ? (
                                             <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.fixture.date).format('HH:mm')}</Text>
                                             </View>
                                         ) : (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home.total}</Text>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
                                                 </View>
                                                 <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away.total}</Text>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
                                                 </View>
                                             </View>
                                         )}
@@ -221,8 +197,8 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
                                         </View>
                                     </View>
 
-                                    {e.status.long !== 'Not Started' && (
-                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.date).format('HH:mm')}</Text>
+                                    {e.fixture.status.long !== 'Not Started' && (
+                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.fixture.date).format('HH:mm')}</Text>
                                     )}
 
                                 </View>
@@ -243,7 +219,7 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
     )
 }
 
-export default BasketBallCalendarScreen
+export default PremierLeagueCalendarScreen
 
 const styles = StyleSheet.create({
     elevate: {

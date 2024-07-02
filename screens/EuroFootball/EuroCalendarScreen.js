@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const EuroCalendarScreen = ({navigation, route}) => {
 
-    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { euroAd, setEuroAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -34,7 +34,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
         .then(response => response.json())
         .then(data => {
             data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
-
+            console.log(JSON.stringify(data.response));
             setListMatches([...data.response])
             setIsLoading(false)
         }).catch(err => {
@@ -44,9 +44,17 @@ const EuroCalendarScreen = ({navigation, route}) => {
     }
 
     const fetchDateMatches = async (date) => {
-        if(firstLigue1Ad){
-            setFirstLigue1Ad(false)
-            interstitial.show();
+        try {
+            console.log('ici');
+            if(euroAd){
+                console.log('la');
+                setEuroAd(false)
+                console.log('oui');
+                interstitial.show();
+                console.log('non');
+            }
+        } catch (error) {
+            console.log(error);            
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')
@@ -174,7 +182,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                                     source={{uri: listMatches[0].league.logo}}
                                 />
                                 <Text style={{textAlign: 'center',fontSize: 15,fontWeight: 'bold', textTransform: 'capitalize'}}>
-                                    - {moment(listMatches[0].fixture.date).format('dddd LL')} - Journée {listMatches[0].league.round.slice(-2)}
+                                    - {listMatches[0].league.round}
                                 </Text>
                             </View>
                         )}
@@ -183,7 +191,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                             return(
                                 <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.fixture.status.long !== 'Not Started' ? 0 : 8}}>
                                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
-                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: e.fixture.status.long == 'Match Finished' && e.fixture.status.short == 'PEN' ? 0 : 25,justifyContent:'flex-end',}}>
                                             <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
                                             <Image
                                                 style={{width: 30, height: 30}}
@@ -192,7 +200,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                                             />
                                         </View>
 
-                                        {e.fixture.status.long == 'Match Finished' ? (
+                                        {e.fixture.status.long == 'Match Finished' && e.fixture.status.short !== 'PEN' ? (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'flex-start',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
                                                     <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
@@ -205,6 +213,34 @@ const EuroCalendarScreen = ({navigation, route}) => {
                                             <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
                                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.fixture.date).format('HH:mm')}</Text>
                                             </View>
+                                        ) : e.fixture.status.long == 'Match Finished' && e.fixture.status.short == 'PEN' ? (
+                                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
+                                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'flex-start',gap: 3, width: '10%'}}>
+                                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
+                                                    </View>
+                                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
+                                                    </View>
+                                                </View>
+                                                <Text style={{fontSize: 12,color:'#a8a8a8'}}>
+                                                    {isFrench ? 'Tir au but' : 'Penalty'} : {e.score.penalty.home} - {e.score.penalty.away}
+                                                </Text>
+                                            </View>
+                                        ) : e.fixture.status.short == 'PEN' ? (
+                                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
+                                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
+                                                    </View>
+                                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
+                                                    </View>
+                                                </View>
+                                                <Text style={{fontSize: 12,color:'#a8a8a8'}}>
+                                                    {isFrench ? 'Tir au but' : 'Penalty'} : {e.score.penalty.home} - {e.score.penalty.away}
+                                                </Text>
+                                            </View>
                                         ) : (
                                             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
                                                 <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
@@ -216,7 +252,7 @@ const EuroCalendarScreen = ({navigation, route}) => {
                                             </View>
                                         )}
 
-                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: e.fixture.status.long == 'Match Finished' && e.fixture.status.short == 'PEN' ? 0 : 25}}>
                                             <Image
                                                 style={{width: 30, height: 30}}
                                                 resizeMode='contain'
@@ -228,6 +264,12 @@ const EuroCalendarScreen = ({navigation, route}) => {
 
                                     {e.fixture.status.long !== 'Not Started' && (
                                         <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.fixture.date).format('HH:mm')}</Text>
+                                    )}
+
+                                    {e.fixture.status.long == 'Not Started' && (
+                                        <Text style={{fontSize: 12,color:'#a8a8a8', textAlign: 'center',}}>
+                                            {e.fixture.venue.name} - {e.fixture.venue.city}
+                                        </Text>
                                     )}
 
                                 </View>

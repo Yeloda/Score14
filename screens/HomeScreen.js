@@ -14,6 +14,10 @@ import EuroNavigator from '../navigation/EuroNavigator';
 import ChooseSportScreen from './ChooseSportScreen';
 import Top14Navigator from '../navigation/Top14Navigator';
 import { GlobalContext } from '../contexts/GlobalContext';
+import AllCalendarScreen from './AllCalendarScreen';
+import ChampionsCupNavigator from '../navigation/ChampionsCupNavigator';
+import PremierLeagueNavigator from '../navigation/PremierLeagueNavigator';
+import ChampionsLeagueNavigator from '../navigation/ChampionsLeagueNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -92,6 +96,33 @@ const HomeScreen = ({ navigation, route }) => {
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
             />
+            
+            <Drawer.Screen
+                name="Champions Cup"
+                component={ChampionsCupNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <MaterialIcons name="sports-rugby" size={22} color={color} />
+                        // <Ionicons name="home-outline" size={22} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name="Euro 2024"
+                component={EuroNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
 
             <Drawer.Screen
                 name="Ligue 1"
@@ -107,8 +138,21 @@ const HomeScreen = ({ navigation, route }) => {
             />
 
             <Drawer.Screen
-                name="Euro 2024"
-                component={EuroNavigator}
+                name="Premier League"
+                component={PremierLeagueNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            <Drawer.Screen
+                name={isFrench ? 'Ligue des Champions' : 'Champions League'}
+                component={ChampionsLeagueNavigator}
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
@@ -145,18 +189,18 @@ const HomeScreen = ({ navigation, route }) => {
                 }}
             />
 
-            {/* <Drawer.Screen
-                name={isFrench ? 'Réglages' : 'Settings'}
-                component={Formule1Navigator}
+            <Drawer.Screen
+                name={isFrench ? 'Tous les sports' : 'All Sports'}
+                component={AllCalendarScreen}
                 options={{
                     headerShown: false,
                     drawerIcon: ({color}) => (
-                        <MaterialIcons name="sports-motorsports" size={24} color={color} />
+                        <AntDesign name="calendar" size={24} color={color} />
                     ),
                     headerTitle: () => <></>,
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
-            /> */}
+            />
         </Drawer.Navigator>
     )
 };

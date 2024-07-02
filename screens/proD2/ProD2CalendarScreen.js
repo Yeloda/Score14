@@ -23,7 +23,7 @@ const ProD2CalendarScreen = ({navigation, route}) => {
             setIsLoading(true)
             const today = moment().format('YYYY-MM-DD')
 
-            fetch("https://v1.rugby.api-sports.io/games?season=2023&league=17&date="+today, {
+            fetch("https://v1.rugby.api-sports.io/games?season=2024&league=17&date="+today, {
                 "method": "GET",
                 "headers": {
                     "x-rapidapi-host": "v1.rugby.api-sports.io",

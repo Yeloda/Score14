@@ -11,7 +11,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const { width, height } = Dimensions.get('window')
 
-const EuroRankingScreen = ({navigation, route}) => {
+const ChampionsCupRankingScreen = ({navigation, route}) => {
 
     const { isLoading, setIsLoading, adBannerId, isFrench } = useContext(GlobalContext);
 
@@ -41,25 +41,50 @@ const EuroRankingScreen = ({navigation, route}) => {
 
         doRefresh ? setIsRefreshing(true) : setIsLoading(true)
 
-        fetch("https://v3.football.api-sports.io/standings?league=4&season=2024", {
+        fetch("https://v1.rugby.api-sports.io/standings?league=54&season=2024", {
             "method": "GET",
             "headers": {
-                "x-rapidapi-host": "v3.football.api-sports.io",
+                "x-rapidapi-host": "v1.rugby.api-sports.io",
                 "x-rapidapi-key": process.env.API_KEY
             }
         })
         .then(response => response.json())
         .then(data => {
             if(data.response[0]){
-                setTousRankings([...data.response[0].league.standings])
-                setARankings([...data.response[0].league.standings[0]])
-                setBRankings([...data.response[0].league.standings[1]])
-                setCRankings([...data.response[0].league.standings[2]])
-                setDRankings([...data.response[0].league.standings[3]])
-                setERankings([...data.response[0].league.standings[4]])
-                setFRankings([...data.response[0].league.standings[5]])
+                setTousRankings([...data.response[0]])
+                setARankings([...data.response[0].filter(e => e.group.name == 'Group 1')])
+                setBRankings([...data.response[0].filter(e => e.group.name == 'Group 2')])
+                setCRankings([...data.response[0].filter(e => e.group.name == 'Group 3')])
+                setDRankings([...data.response[0].filter(e => e.group.name == 'Group 4')])
+                setERankings([...data.response[0].filter(e => e.group.name == 'Group 5')])
+                setFRankings([...data.response[0].filter(e => e.group.name == 'Group 6')])
+
+                doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            }else{
+                fetch("https://v1.rugby.api-sports.io/standings?league=54&season=2023", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "v1.rugby.api-sports.io",
+                        "x-rapidapi-key": process.env.API_KEY
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.response[0]){
+                        setTousRankings([...data.response[0]])
+                        setARankings([...data.response[0].filter(e => e.group.name == 'Group 1')])
+                        setBRankings([...data.response[0].filter(e => e.group.name == 'Group 2')])
+                        setCRankings([...data.response[0].filter(e => e.group.name == 'Group 3')])
+                        setDRankings([...data.response[0].filter(e => e.group.name == 'Group 4')])
+                        setERankings([...data.response[0].filter(e => e.group.name == 'Group 5')])
+                        setFRankings([...data.response[0].filter(e => e.group.name == 'Group 6')])
+                    }
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                }).catch(err => {
+                    console.log(err);
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                });
             }
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
             console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)
@@ -92,7 +117,7 @@ const EuroRankingScreen = ({navigation, route}) => {
 
                     <SwitchSelector
                         initial={0}
-                        options={[{label:'Tout',value:'tout'},{label:'A',value:'a'},{label:'B',value:'b'},{label:'C',value:'c'},{label:'D',value:'d'},{label:'E',value:'e'},{label:'F',value:'f'}]}
+                        options={[{label:'Tout',value:'tout'},{label:'A',value:'a'},{label:'B',value:'b'},{label:'C',value:'c'},{label:'D',value:'d'}]}
                         onPress={val => setOrdre(val)}
                         buttonColor="#333"
                         backgroundColor="#bdbdbd"
@@ -106,176 +131,111 @@ const EuroRankingScreen = ({navigation, route}) => {
             <ScrollView
                 refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
             >
-                {!isLoading && ordre == 'tout' && tousRankings.map((elt, index) => {
+                {!isLoading && ordre == 'tout' && tousRankings.map((e, index) => {
 
-                    return(
-                        <View key={Math.random()}>
-
-                            {elt[0].group == 'Ranking of third-placed teams' ? (
-                                <View style={{backgroundColor: '#cfcfcf',padding: 15,marginTop: 20,}}>
-                                    <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>
-                                        {isFrench ? 'Classement des Meilleurs Troisième' : 'Ranking of third-placed teams'}
-                                    </Text>
-                                </View>
-                            ) : (
+                    if(index == 0 || index % 6 == 0){
+                        return(
+                            <View key={Math.random()}>
                                 <View style={{backgroundColor: '#cfcfcf',padding: 15, flexDirection:'row',marginTop: 10,}}>
                                     <View key={Math.random()} style={{flexDirection:'row',alignItems:'flex-end',}}>
-
+                
                                         <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 3,width: '25%'}}>
-                                            <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{elt[0].group}</Text>
+                                            <Text style={{fontSize: 15,fontWeight: 'bold',textAlign: 'center',}}>{e.group.name}</Text>
                                         </View>
-
-                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '6%'}} />
-
-                                        <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
+                
+                                        <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '11%'}} />
+                
+                                        <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'J' : 'P'}</Text>
                                         </View>
-                                        <View style={{width: '11.2%',justifyContent:'center',alignItems:'center',}}>
+                                        <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'V' : 'W'}</Text>
                                         </View>
-                                        <View style={{width: '12%',justifyContent:'center',alignItems:'center',}}>
+                                        <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'N' : 'D'}</Text>
                                         </View>
-                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                        <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>{isFrench ? 'D' : 'L'}</Text>
                                         </View>
-                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                        <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>+/-</Text>
                                         </View>
-                                        <View style={{width: '11.7%',justifyContent:'center',alignItems:'center',}}>
+                                        <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                             <Text style={{color:'black',fontSize: 12,fontWeight: 'bold',}}>PTS</Text>
                                         </View>
                                     </View>
                                 </View>
-                            )}
 
-
-
-                            <ScrollView>
-                                {elt.map((e, index) => {
-                                    let teamName = ''
-                                    switch (e.team.name) {
-                                        case "Germany":
-                                            teamName = "ALL"
-                                            break;
-                                        case "Scotland":
-                                            teamName = "ECO"
-                                            break;
-                                        case "Switzerland":
-                                            teamName = "SUI"
-                                            break;
-                                        case "Hungary":
-                                            teamName = "HON"
-                                            break;
-
-                                        case "Italy":
-                                            teamName = "ITA"
-                                            break;
-                                        case "Croatia":
-                                            teamName = "CRO"
-                                            break;
-                                        case "Spain":
-                                            teamName = "ESP"
-                                            break;
-                                        case "Albania":
-                                            teamName = "ALB"
-                                            break;
-
-                                        case "Slovenia":
-                                            teamName = "SVN"
-                                            break;
-                                        case "Denmark":
-                                            teamName = "DAN"
-                                            break;
-                                        case "England":
-                                            teamName = "ANG"
-                                            break;
-                                        case "Serbia":
-                                            teamName = "SRB"
-                                            break;
-
-                                        case "Poland":
-                                            teamName = "POL"
-                                            break;
-                                        case "Austria":
-                                            teamName = "AUT"
-                                            break;
-                                        case "France":
-                                            teamName = "FRA"
-                                            break;
-                                        case "Netherlands":
-                                            teamName = "NED"
-                                            break;
-
-                                        case "Romania":
-                                            teamName = "ROU"
-                                            break;
-                                        case "Belgium":
-                                            teamName = "BEL"
-                                            break;
-                                        case "Slovakia":
-                                            teamName = "SVK"
-                                            break;
-                                        case "Ukraine":
-                                            teamName = "UKR"
-                                            break;
-
-                                        case "Czech Republic":
-                                            teamName = "CZE"
-                                            break;
-                                        case "Turkey":
-                                            teamName = "TUR"
-                                            break;
-                                        case "Portugal":
-                                            teamName = "POR"
-                                            break;
-                                        case "Georgia":
-                                            teamName = "GEO"
-                                            break;
-
-                                        default:
-                                            teamName = e.team.name
-                                            break;
-                                    }
-
-                                    return(
-                                        <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
-                                            </View>
-                                            <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
-                                                <Image
-                                                    style={{width: 28, height: 28}}
-                                                    resizeMode='contain'
-                                                    source={{uri: e.team.logo}}
-                                                />
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
-                                            </View>
-                                            <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
-                                            </View>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
-                                            </View>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
-                                            </View>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
-                                            </View>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
-                                            </View>
-                                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
-                                            </View>
-                                        </View>
-                                    )
-                                })}
-                            </ScrollView>
-                        </View>
-
-                    )
+                                <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
+                                    <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '27%',}}>
+                                        <Image
+                                            style={{width: 28, height: 28}}
+                                            resizeMode='contain'
+                                            source={{uri: e.team.logo == 'https://media.api-sports.io/rugby/teams/0.png' ? 'https://media.api-sports.io/rugby/teams/100.png' : e.team.logo}}
+                                        />
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
+                                    </View>
+                                    <View style={{width: '9%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
+                                    </View>
+                                    <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    }else{
+                        return(
+                            <View key={Math.random()}>
+                                <View style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
+                                    <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '27%',}}>
+                                        <Image
+                                            style={{width: 28, height: 28}}
+                                            resizeMode='contain'
+                                            source={{uri: e.team.logo == 'https://media.api-sports.io/rugby/teams/0.png' ? 'https://media.api-sports.io/rugby/teams/100.png' : e.team.logo}}
+                                        />
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
+                                    </View>
+                                    <View style={{width: '9%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
+                                    </View>
+                                    <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
+                                    </View>
+                                    <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                        <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    }
                 })}
 
                 {!isLoading && ordre == 'a' && (
@@ -310,57 +270,36 @@ const EuroRankingScreen = ({navigation, route}) => {
                         </View>
                     </View>
                 )}
-                {!isLoading && ordre == 'a' && aRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Germany":
-                            teamName = "ALL"
-                            break;
-                        case "Scotland":
-                            teamName = "ECO"
-                            break;
-                        case "Switzerland":
-                            teamName = "SUI"
-                            break;
-                        case "Hungary":
-                            teamName = "HON"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
-                    
+                {!isLoading && ordre == 'a' && aRankings.map((e, index) => {                    
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
-                            <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
+                            <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '27%',}}>
                                 <Image
                                     style={{width: 28, height: 28}}
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
+                            </View>
+                            <View style={{width: '9%',justifyContent:'center',alignItems:'center',}}>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
+                            </View>
+                            <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
+                            </View>
+                            <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
-                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
-                            </View>
-                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
-                            </View>
-                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
-                            </View>
-                            <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
+                            <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
                             </View>
                         </View>
@@ -399,31 +338,10 @@ const EuroRankingScreen = ({navigation, route}) => {
                     </View>
                 )}
                 {!isLoading && ordre == 'b' && bRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Italy":
-                            teamName = "ITA"
-                            break;
-                        case "Croatia":
-                            teamName = "CRO"
-                            break;
-                        case "Spain":
-                            teamName = "ESP"
-                            break;
-                        case "Albania":
-                            teamName = "ALB"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
-                    
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
@@ -431,22 +349,22 @@ const EuroRankingScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -488,31 +406,10 @@ const EuroRankingScreen = ({navigation, route}) => {
                     </View>
                 )}                
                 {!isLoading && ordre == 'c' && cRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Slovenia":
-                            teamName = "SVN"
-                            break;
-                        case "Denmark":
-                            teamName = "DAN"
-                            break;
-                        case "England":
-                            teamName = "ANG"
-                            break;
-                        case "Serbia":
-                            teamName = "SRB"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
-                    
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
@@ -520,22 +417,22 @@ const EuroRankingScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -576,32 +473,11 @@ const EuroRankingScreen = ({navigation, route}) => {
                         </View>
                     </View>
                 )}                
-                {!isLoading && ordre == 'd' && dRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Poland":
-                            teamName = "POL"
-                            break;
-                        case "Austria":
-                            teamName = "AUT"
-                            break;
-                        case "France":
-                            teamName = "FRA"
-                            break;
-                        case "Netherlands":
-                            teamName = "NED"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
-                    
+                {!isLoading && ordre == 'd' && dRankings.map((e, index) => {                    
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
@@ -609,22 +485,22 @@ const EuroRankingScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -666,31 +542,10 @@ const EuroRankingScreen = ({navigation, route}) => {
                     </View>
                 )}
                 {!isLoading && ordre == 'e' && eRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Romania":
-                            teamName = "ROU"
-                            break;
-                        case "Belgium":
-                            teamName = "BEL"
-                            break;
-                        case "Slovakia":
-                            teamName = "SVK"
-                            break;
-                        case "Ukraine":
-                            teamName = "UKR"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
-                    
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
@@ -698,22 +553,22 @@ const EuroRankingScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -755,31 +610,11 @@ const EuroRankingScreen = ({navigation, route}) => {
                     </View>
                 )}
                 {!isLoading && ordre == 'f' && fRankings.map((e, index) => {
-
-                    let teamName = ''
-                    switch (e.team.name) {
-                        case "Czech Republic":
-                            teamName = "CZE"
-                            break;
-                        case "Turkey":
-                            teamName = "TUR"
-                            break;
-                        case "Portugal":
-                            teamName = "POR"
-                            break;
-                        case "Georgia":
-                            teamName = "GEO"
-                            break;
-
-                        default:
-                            teamName = e.team.name
-                            break;
-                    }
                     
                     return(
                         <View key={Math.random()} style={{flexDirection:'row',backgroundColor: index % 2 == 0 ? 'white' : '#f0f0f0',height: 45,}}>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.rank}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.position}</Text>
                             </View>
                             <View style={{flexDirection:'row',justifyContent:'flex-start',alignItems:'center',gap: 7, width: '23%',}}>
                                 <Image
@@ -787,22 +622,22 @@ const EuroRankingScreen = ({navigation, route}) => {
                                     resizeMode='contain'
                                     source={{uri: e.team.logo}}
                                 />
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{teamName}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.team.name}</Text>
                             </View>
                             <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.played}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.played}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.win}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.win.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.draw}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.draw.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.lose}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.games.lose.total}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
-                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.all.goals.for - e.all.goals.against}</Text>
+                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.goals.for - e.goals.against}</Text>
                             </View>
                             <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}>
                                 <Text style={{fontSize: 14,fontWeight: 'bold',}}>{e.points}</Text>
@@ -822,6 +657,6 @@ const EuroRankingScreen = ({navigation, route}) => {
     )
 }
 
-export default EuroRankingScreen
+export default ChampionsCupRankingScreen
 
 const styles = StyleSheet.create({})

@@ -3,7 +3,7 @@
     "name": "Score14",
     "slug": "score14",
     "icon": "./assets/logo_score14_petit.png",
-    "version": "1.0.6",
+    "version": "2.0.0",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/logo_avec_texte.png",
@@ -16,14 +16,14 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yeloda.score14",
-      "buildNumber": "7",
+      "buildNumber": "9",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This tracking will be used to deliver personalized ads to you."
       }
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 13
+      "versionCode": 14
     },
     "runtimeVersion": {
       "policy": "appVersion"
