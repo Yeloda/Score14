@@ -43,9 +43,13 @@ const Formule1CalendarScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(firstFormule1Ad){
-            setFirstFormule1Ad(false)
-            interstitial.show();
+        try {
+            if(firstFormule1Ad){
+                setFirstFormule1Ad(false)
+                interstitial.show();
+            }
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

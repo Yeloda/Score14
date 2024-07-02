@@ -44,9 +44,13 @@ const FootballCalendarScreen = ({navigation, route}) => {
     }
 
     const fetchDateMatches = async (date) => {
-        if(firstLigue1Ad){
-            setFirstLigue1Ad(false)
-            interstitial.show();
+        try {
+            if(firstLigue1Ad){
+                setFirstLigue1Ad(false)
+                interstitial.show();
+            }
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

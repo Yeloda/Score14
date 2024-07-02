@@ -136,9 +136,13 @@ const AllCalendarScreen = ({navigation, route}) => {
     }
     
     const fetchDateMatches = async (date) => {
-        if(allCalendarAd){
-            setAllCalendarAd(false)
-            interstitial.show();
+        try {
+            if(allCalendarAd){
+                setAllCalendarAd(false)
+                interstitial.show();
+            }            
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(moment(date).format('YYYY-MM-DD'))
 

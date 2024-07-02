@@ -34,9 +34,13 @@ const PremierLeagueCalendarScreen = ({navigation, route}) => {
     }
 
     const fetchDateMatches = async (date) => {
-        if(firstPremierLeagueAd){
-            setFirstPremierLeagueAd(false)
-            interstitial.show();
+        try {
+            if(firstPremierLeagueAd){
+                setFirstPremierLeagueAd(false)
+                interstitial.show();
+            }            
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

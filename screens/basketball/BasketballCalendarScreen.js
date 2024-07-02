@@ -43,9 +43,13 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(firstBasketAd){
-            setFirstBasketAd(false)
-            interstitial.show();
+        try {
+            if(firstBasketAd){
+                setFirstBasketAd(false)
+                interstitial.show();
+            }
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

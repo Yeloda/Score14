@@ -37,9 +37,13 @@ const ChampionsLeagueCalendarScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(championsLeagueAd){
-            setChampionsLeagueAd(false)
-            interstitial.show();
+        try {
+            if(championsLeagueAd){
+                setChampionsLeagueAd(false)
+                interstitial.show();
+            }
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

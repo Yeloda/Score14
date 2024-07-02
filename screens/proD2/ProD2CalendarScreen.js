@@ -42,9 +42,13 @@ const ProD2CalendarScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(firstProD2Ad){
-            setFirstProD2Ad(false)
-            interstitial.show();
+        try {
+            if(firstProD2Ad){
+                setFirstProD2Ad(false)
+                interstitial.show();
+            }            
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

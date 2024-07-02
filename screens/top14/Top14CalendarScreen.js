@@ -41,9 +41,13 @@ const Top14CalendarScreen = ({navigation, route}) => {
     }, [])
     
     const fetchDateMatches = async (date) => {
-        if(firstAd){
-            setFirstAd(false)
-            interstitial.show();
+        try {
+            if(firstAd){
+                setFirstAd(false)
+                interstitial.show();
+            }            
+        } catch (error) {
+            console.log(error);
         }
         setSelectedDate(date)
         const searchDate = moment(date).format('YYYY-MM-DD')

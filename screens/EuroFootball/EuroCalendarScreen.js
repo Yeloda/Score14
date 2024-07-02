@@ -45,13 +45,9 @@ const EuroCalendarScreen = ({navigation, route}) => {
 
     const fetchDateMatches = async (date) => {
         try {
-            console.log('ici');
             if(euroAd){
-                console.log('la');
                 setEuroAd(false)
-                console.log('oui');
                 interstitial.show();
-                console.log('non');
             }
         } catch (error) {
             console.log(error);            
