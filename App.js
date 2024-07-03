@@ -25,8 +25,10 @@ import 'moment/locale/fr';
 import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
 import { Platform } from 'react-native';
 
-const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8021711542' : 'ca-app-pub-6675990995324469/6316225123';
-const adBannerId = __DEV__ ? TestIds.ADAPTIVE_BANNER : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8824862606' : 'ca-app-pub-6675990995324469/3329332651';
+// const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8021711542' : 'ca-app-pub-6675990995324469/6316225123';
+// const adBannerId = __DEV__ ? TestIds.ADAPTIVE_BANNER : Platform.OS == 'ios' ? 'ca-app-pub-6675990995324469/8824862606' : 'ca-app-pub-6675990995324469/3329332651';
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : Platform.OS == 'ios' ? 'ca-app-pub-2341376702350501/2097959693' : 'ca-app-pub-2341376702350501/4020032561';
+const adBannerId = __DEV__ ? TestIds.ADAPTIVE_BANNER : Platform.OS == 'ios' ? 'ca-app-pub-2341376702350501/7350286379' : 'ca-app-pub-2341376702350501/4013676590';
 
 const interstitial = InterstitialAd.createForAdRequest(adUnitId);
 
@@ -75,7 +77,8 @@ export default function App() {
                 }
             }
 
-            const adapterStatuses = mobileAds().initialize()
+            const adapterStatuses = await mobileAds().initialize()
+            console.log(adapterStatuses);
         }
     }, [])
 

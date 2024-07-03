@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 14
+      "versionCode": 15
     },
     "runtimeVersion": {
       "policy": "appVersion"
@@ -56,8 +56,8 @@
     ]
   },
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-6675990995324469~4727525870",
-    "ios_app_id": "ca-app-pub-6675990995324469~9752621844",
+    "android_app_id": "ca-app-pub-2341376702350501~9266003272",
+    "ios_app_id": "ca-app-pub-2341376702350501~9080787556",
     "user_tracking_usage_description": "This identifier will be used to deliver personalized ads to you.",
     "sk_ad_network_items": [
       "cstr6suwn9.skadnetwork",

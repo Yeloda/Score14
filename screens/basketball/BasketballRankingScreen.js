@@ -40,17 +40,51 @@ const BasketRankingScreen = ({navigation, route}) => {
             let tempEst = []
             let tempOuest = []
 
-            data.response[0].map(e => {
-                if(e.group.name == 'Western Conference'){
-                    tempOuest.push(e)
-                }else if(e.group.name == 'Eastern Conference'){
-                    tempEst.push(e)
-                }
-            })
+            console.log(JSON.stringify(data.response));
+            if(data.response.length > 0){
+                data.response[0].map(e => {
+                    if(e.group.name == 'Western Conference'){
+                        tempOuest.push(e)
+                    }else if(e.group.name == 'Eastern Conference'){
+                        tempEst.push(e)
+                    }
+                })
+    
+                setRankingsEst([...tempEst])
+                setRankingsOuest([...tempOuest])
+                doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+            }else{
+                fetch("https://v1.basketball.api-sports.io/standings?league=12&season=2023-2024", {
+                    "method": "GET",
+                    "headers": {
+                        "x-rapidapi-host": "v1.rugby.api-sports.io",
+                        "x-rapidapi-key": process.env.API_KEY
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+        
+                    let tempEst = []
+                    let tempOuest = []
+        
+                    data.response[0].map(e => {
+                        if(e.group.name == 'Western Conference'){
+                            tempOuest.push(e)
+                        }else if(e.group.name == 'Eastern Conference'){
+                            tempEst.push(e)
+                        }
+                    })
+        
+                    setRankingsEst([...tempEst])
+                    setRankingsOuest([...tempOuest])
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+        
+                }).catch(err => {
+                    console.log(err);
+                    doRefresh ? setIsRefreshing(false) : setIsLoading(false)
+                });
+            }
 
-            setRankingsEst([...tempEst])
-            setRankingsOuest([...tempOuest])
-            doRefresh ? setIsRefreshing(false) : setIsLoading(false)
         }).catch(err => {
             console.log(err);
             doRefresh ? setIsRefreshing(false) : setIsLoading(false)

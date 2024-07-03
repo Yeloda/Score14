@@ -25,10 +25,7 @@ const ChampionsLeagueCalendarScreen = ({navigation, route}) => {
 
             fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=2&date="+today, {"method": "GET","headers": {"x-rapidapi-host": "v3.football.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
             .then(response => response.json())
-            .then(data => {
-                console.log('Ligue des champions');
-                console.log(data.response);
-    
+            .then(data => {    
                 data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
                 setListMatchesChampion([...data.response])
                 setIsLoading(false)
@@ -83,7 +80,7 @@ const ChampionsLeagueCalendarScreen = ({navigation, route}) => {
                     <Image
                         style={{width: 30,height: 30,marginLeft: 5,backgroundColor: 'white',}}
                         resizeMode='contain'
-                        source={{uri: "https://media.api-sports.io/rugby/leagues/54.png"}}
+                        source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
                     />
                 </View>
                 <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
