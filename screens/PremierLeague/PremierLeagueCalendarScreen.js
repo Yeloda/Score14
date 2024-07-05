@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const PremierLeagueCalendarScreen = ({navigation, route}) => {
 
-    const { firstPremierLeagueAd, setFirstPremierLeagueAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, firstPremierLeagueAd, setFirstPremierLeagueAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -35,10 +35,14 @@ const PremierLeagueCalendarScreen = ({navigation, route}) => {
 
     const fetchDateMatches = async (date) => {
         try {
-            if(firstPremierLeagueAd){
-                setFirstPremierLeagueAd(false)
+            // if(firstPremierLeagueAd){
+            //     setFirstPremierLeagueAd(false)
+            //     interstitial.show();
+            // }   
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
-            }            
+            }         
         } catch (error) {
             console.log(error);
         }

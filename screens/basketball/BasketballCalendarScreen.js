@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const BasketBallCalendarScreen = ({navigation, route}) => {
 
-    const { firstBasketAd, setFirstBasketAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, firstBasketAd, setFirstBasketAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -44,8 +44,12 @@ const BasketBallCalendarScreen = ({navigation, route}) => {
     
     const fetchDateMatches = async (date) => {
         try {
-            if(firstBasketAd){
-                setFirstBasketAd(false)
+            // if(firstBasketAd){
+            //     setFirstBasketAd(false)
+            //     interstitial.show();
+            // }
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
             }
         } catch (error) {

@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yeloda.score14",
-      "buildNumber": "9",
+      "buildNumber": "10",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This tracking will be used to deliver personalized ads to you."
       }

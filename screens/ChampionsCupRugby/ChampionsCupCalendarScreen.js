@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const ChampionsCupCalendarScreen = ({navigation, route}) => {
 
-    const { championsCupAd, setChampionsCupAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, championsCupAd, setChampionsCupAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatchesChampion, setListMatchesChampion] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -42,10 +42,14 @@ const ChampionsCupCalendarScreen = ({navigation, route}) => {
     
     const fetchDateMatches = async (date) => {
         try {
-            if(championsCupAd){
-                setChampionsCupAd(false)
+            // if(championsCupAd){
+            //     setChampionsCupAd(false)
+            //     interstitial.show();
+            // }
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
-            }            
+            }
         } catch (error) {
             console.log(error);
         }

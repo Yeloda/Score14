@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const FootballCalendarScreen = ({navigation, route}) => {
 
-    const { firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, firstLigue1Ad, setFirstLigue1Ad, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -45,8 +45,12 @@ const FootballCalendarScreen = ({navigation, route}) => {
 
     const fetchDateMatches = async (date) => {
         try {
-            if(firstLigue1Ad){
-                setFirstLigue1Ad(false)
+            // if(firstLigue1Ad){
+            //     setFirstLigue1Ad(false)
+            //     interstitial.show();
+            // }
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
             }
         } catch (error) {
@@ -103,19 +107,14 @@ const FootballCalendarScreen = ({navigation, route}) => {
                 >
                     <Feather name="menu" size={24} color='white' />
                 </TouchableOpacity>
-                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '23%',}}>
+                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3,marginLeft: 20,}}>
                     <Image
                         style={{width: 30,height: 30,marginLeft: 5}}
                         resizeMode='contain'
                         source={{uri: "https://media.api-sports.io/football/leagues/61.png"}}
                     />
+                    <Text style={{color: 'white', fontWeight: 'bold',}}>Ligue 1</Text>
                 </View>
-                <View style={{width: '10%',justifyContent:'center',alignItems:'center',}}/>
-                <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
-                <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
-                <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
-                <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
-                <View style={{width: '11%',justifyContent:'center',alignItems:'center',}}/>
             </View>
 
             <CalendarStrip

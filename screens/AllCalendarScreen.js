@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const AllCalendarScreen = ({navigation, route}) => {
 
-    const { allCalendarAd, setAllCalendarAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, allCalendarAd, setAllCalendarAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listTop14, setListTop14] = useState([])
     const [listProD2, setListProD2] = useState([])
@@ -137,8 +137,12 @@ const AllCalendarScreen = ({navigation, route}) => {
     
     const fetchDateMatches = async (date) => {
         try {
-            if(allCalendarAd){
-                setAllCalendarAd(false)
+            // if(allCalendarAd){
+            //     setAllCalendarAd(false)
+            //     interstitial.show();
+            // }            
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
             }            
         } catch (error) {

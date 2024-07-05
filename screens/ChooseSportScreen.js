@@ -1,9 +1,10 @@
 import React, { useContext } from 'react'
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { GlobalContext } from '../contexts/GlobalContext'
 
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+import moment from 'moment'
 
 const ChooseSportScreen = ({navigation, route}) => {
 
@@ -94,17 +95,35 @@ const ChooseSportScreen = ({navigation, route}) => {
                         />
                         <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Ligue 1</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('Premier League')}
-                    >
+
+                    {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') ? (
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate('Premier League')}
+                        >
                         <Image
                             style={{height: 50,width:'auto'}}
                             resizeMode='contain'
                             source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
                         />
                         <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Premier League</Text>
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+
+                    ) : (
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate('NBA')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto'}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
+                        </TouchableOpacity>
+
+                    )}
+
                 </View>
 
 
@@ -112,32 +131,34 @@ const ChooseSportScreen = ({navigation, route}) => {
 
 
                 {/* 4eme ligne */}
-                <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto',}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
-                            {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('NBA')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto'}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
-                    </TouchableOpacity>
-                </View>
+                {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') && (
+                    <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto',}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
+                                {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate('NBA')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto'}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
 
 

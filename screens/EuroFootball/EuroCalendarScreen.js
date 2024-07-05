@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { ActivityIndicator, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import moment from 'moment'
 import { AntDesign, Feather } from '@expo/vector-icons'
@@ -9,7 +9,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 
 const EuroCalendarScreen = ({navigation, route}) => {
 
-    const { euroAd, setEuroAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
+    const { firstAd, setFirstAd, euroAd, setEuroAd, interstitial, adBannerId, isFrench } = useContext(GlobalContext);
     
     const [listMatches, setListMatches] = useState([])
     const [isLoading, setIsLoading] = useState(false)
@@ -45,8 +45,12 @@ const EuroCalendarScreen = ({navigation, route}) => {
 
     const fetchDateMatches = async (date) => {
         try {
-            if(euroAd){
-                setEuroAd(false)
+            // if(euroAd){
+            //     setEuroAd(false)
+            //     interstitial.show();
+            // }
+            if(firstAd){
+                setFirstAd(false)
                 interstitial.show();
             }
         } catch (error) {

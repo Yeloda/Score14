@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ActivityIndicator, Dimensions, Image, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Dimensions, Image, Platform, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { GlobalContext } from '../../contexts/GlobalContext'
 
@@ -117,7 +117,6 @@ const ChampionsLeagueRankingScreen = ({navigation, route}) => {
                 <ActivityIndicator style={{marginTop: 100,}} />
             ) : (
                 <View style={{backgroundColor: '#cfcfcf',padding: 15}}>
-
                     <SwitchSelector
                         initial={0}
                         options={[{label:'Tout',value:'tout'},{label:'A',value:'a'},{label:'B',value:'b'},{label:'C',value:'c'},{label:'D',value:'d'},{label:'E',value:'e'},{label:'F',value:'f'},{label:'G',value:'g'},{label:'H',value:'h'}]}

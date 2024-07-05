@@ -18,6 +18,7 @@ import AllCalendarScreen from './AllCalendarScreen';
 import ChampionsCupNavigator from '../navigation/ChampionsCupNavigator';
 import PremierLeagueNavigator from '../navigation/PremierLeagueNavigator';
 import ChampionsLeagueNavigator from '../navigation/ChampionsLeagueNavigator';
+import moment from 'moment';
 
 const Drawer = createDrawerNavigator();
 
@@ -137,31 +138,36 @@ const HomeScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <Drawer.Screen
-                name="Premier League"
-                component={PremierLeagueNavigator}
-                options={{
-                    headerShown: false,
-                    drawerIcon: ({color}) => (
-                        <Ionicons name="football" size={24} color={color} />
-                    ),
-                    headerTitle: () => <></>,
-                    headerStyle: { backgroundColor: '#333333', height: 60 },
-                }}
-            />
+            {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') && (
+                <>
+                    <Drawer.Screen
+                        name="Premier League"
+                        component={PremierLeagueNavigator}
+                        options={{
+                            headerShown: false,
+                            drawerIcon: ({color}) => (
+                                <Ionicons name="football" size={24} color={color} />
+                            ),
+                            headerTitle: () => <></>,
+                            headerStyle: { backgroundColor: '#333333', height: 60 },
+                        }}
+                    />
 
-            <Drawer.Screen
-                name={isFrench ? 'Ligue des Champions' : 'Champions League'}
-                component={ChampionsLeagueNavigator}
-                options={{
-                    headerShown: false,
-                    drawerIcon: ({color}) => (
-                        <Ionicons name="football" size={24} color={color} />
-                    ),
-                    headerTitle: () => <></>,
-                    headerStyle: { backgroundColor: '#333333', height: 60 },
-                }}
-            />
+                    <Drawer.Screen
+                        name={isFrench ? 'Ligue des Champions' : 'Champions League'}
+                        component={ChampionsLeagueNavigator}
+                        options={{
+                            headerShown: false,
+                            drawerIcon: ({color}) => (
+                                <Ionicons name="football" size={24} color={color} />
+                            ),
+                            headerTitle: () => <></>,
+                            headerStyle: { backgroundColor: '#333333', height: 60 },
+                        }}
+                    />
+                </>
+            )}
+
 
             <Drawer.Screen
                 name="NBA"
