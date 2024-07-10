@@ -19,6 +19,21 @@ const ChooseSportScreen = ({navigation, route}) => {
                 </View>
 
 
+                {/* 5eme ligne */}
+                <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginBottom: 10,}}>
+
+                    <TouchableOpacity 
+                        style={{width:'85%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',alignSelf:'center',}}
+                        onPress={() => navigation.navigate(isFrench ? 'Tous les sports' : 'All Sports')}
+                    >
+                        <Image
+                            style={{height: 50,width:'auto',}}
+                            resizeMode='contain'
+                            source={require('../assets/all_sports_2.webp')}
+                        />
+                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Tous les sports' : 'All Sports'}</Text>
+                    </TouchableOpacity>
+                </View>
 
 
                 {/* 1ere ligne */}
@@ -67,98 +82,82 @@ const ChooseSportScreen = ({navigation, route}) => {
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('Euro 2024')}
+                        onPress={() => navigation.navigate('Rugby International')}
                     >
                         <Image
                             style={{height: 50,width:'auto'}}
                             resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/4.png"}}
+                            source={{uri: "https://media.api-sports.io/rugby/leagues/85.png"}}
                         />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Euro 2024</Text>
+                        <Text style={{textAlign: 'center',marginTop: 5,fontWeight: 'bold',fontSize: 16,}}>Rugby{"\n"}International</Text>
                     </TouchableOpacity>
                 </View>
 
 
 
-
-
-                {/* 3eme ligne */}
-                <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('Ligue 1')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto'}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/61.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Ligue 1</Text>
-                    </TouchableOpacity>
-
-                    {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') ? (
-                        <TouchableOpacity 
-                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                            onPress={() => navigation.navigate('Premier League')}
-                        >
-                        <Image
-                            style={{height: 50,width:'auto'}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Premier League</Text>
-                        </TouchableOpacity>
-
-                    ) : (
-                        <TouchableOpacity 
-                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                            onPress={() => navigation.navigate('NBA')}
-                        >
-                            <Image
-                                style={{height: 50,width:'auto'}}
-                                resizeMode='contain'
-                                source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
-                            />
-                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
-                        </TouchableOpacity>
-
-                    )}
-
-                </View>
-
-
-
-
-
-                {/* 4eme ligne */}
                 {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') && (
-                    <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                        <TouchableOpacity 
-                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                            onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
-                        >
-                            <Image
-                                style={{height: 50,width:'auto',}}
-                                resizeMode='contain'
-                                source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
-                            />
-                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
-                                {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                            onPress={() => navigation.navigate('NBA')}
-                        >
-                            <Image
-                                style={{height: 50,width:'auto'}}
-                                resizeMode='contain'
-                                source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
-                            />
-                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <>
+                        {/* 3eme ligne */}
+                        <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                            <TouchableOpacity 
+                                style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                                onPress={() => navigation.navigate('Euro 2024')}
+                            >
+                                <Image
+                                    style={{height: 50,width:'auto'}}
+                                    resizeMode='contain'
+                                    source={{uri: "https://media.api-sports.io/football/leagues/4.png"}}
+                                />
+                                <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Euro 2024</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                                onPress={() => navigation.navigate('Ligue 1')}
+                            >
+                                <Image
+                                    style={{height: 50,width:'auto'}}
+                                    resizeMode='contain'
+                                    source={{uri: "https://media.api-sports.io/football/leagues/61.png"}}
+                                />
+                                <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Ligue 1</Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* 4eme ligne */}
+                        <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                            <TouchableOpacity 
+                                style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                                onPress={() => navigation.navigate('Premier League')}
+                            >
+                                <Image
+                                    style={{height: 50,width:'auto'}}
+                                    resizeMode='contain'
+                                    source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
+                                />
+                                <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Premier League</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                                onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
+                            >
+                                <Image
+                                    style={{height: 50,width:'auto',}}
+                                    resizeMode='contain'
+                                    source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
+                                />
+                                <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
+                                    {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                    </>
                 )}
+
+
+
+
+
 
 
 
@@ -166,6 +165,17 @@ const ChooseSportScreen = ({navigation, route}) => {
 
                 {/* 5eme ligne */}
                 <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                    <TouchableOpacity 
+                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                        onPress={() => navigation.navigate('NBA')}
+                    >
+                        <Image
+                            style={{height: 50,width:'auto'}}
+                            resizeMode='contain'
+                            source={{uri: "https://media.api-sports.io/basketball/leagues/12.png"}}
+                        />
+                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>NBA</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity 
                         style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
                         onPress={() => navigation.navigate(isFrench ? 'Formule 1' : 'Formula 1')}
@@ -177,22 +187,7 @@ const ChooseSportScreen = ({navigation, route}) => {
                         />
                         <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Formule 1' : ' Formula 1'}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate(isFrench ? 'Tous les sports' : 'All Sports')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto',}}
-                            resizeMode='contain'
-                            source={require('../assets/all_sports_2.webp')}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Tous les sports' : 'All Sports'}</Text>
-                    </TouchableOpacity>
                 </View>
-
-
-
-
 
                 <View style={{height: 150}}/>
             </ScrollView>

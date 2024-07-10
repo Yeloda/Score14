@@ -16,14 +16,14 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.yeloda.score14",
-      "buildNumber": "10",
+      "buildNumber": "11",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This tracking will be used to deliver personalized ads to you."
       }
     },
     "android": {
       "package": "com.yeloda.score14",
-      "versionCode": 15
+      "versionCode": 16
     },
     "runtimeVersion": {
       "policy": "appVersion"

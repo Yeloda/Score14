@@ -19,6 +19,7 @@ import ChampionsCupNavigator from '../navigation/ChampionsCupNavigator';
 import PremierLeagueNavigator from '../navigation/PremierLeagueNavigator';
 import ChampionsLeagueNavigator from '../navigation/ChampionsLeagueNavigator';
 import moment from 'moment';
+import RugbyInternationalScreen from './RugbyInternationalScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -111,6 +112,20 @@ const HomeScreen = ({ navigation, route }) => {
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
             />
+            
+            <Drawer.Screen
+                name="Rugby International"
+                component={RugbyInternationalScreen}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <MaterialIcons name="sports-rugby" size={22} color={color} />
+                        // <Ionicons name="home-outline" size={22} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
 
             <Drawer.Screen
                 name="Euro 2024"
@@ -137,9 +152,59 @@ const HomeScreen = ({ navigation, route }) => {
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
             />
+            <Drawer.Screen
+                name="Premier League"
+                component={PremierLeagueNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
 
-            {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') && (
+            <Drawer.Screen
+                name={isFrench ? 'Ligue des Champions' : 'Champions League'}
+                component={ChampionsLeagueNavigator}
+                options={{
+                    headerShown: false,
+                    drawerIcon: ({color}) => (
+                        <Ionicons name="football" size={24} color={color} />
+                    ),
+                    headerTitle: () => <></>,
+                    headerStyle: { backgroundColor: '#333333', height: 60 },
+                }}
+            />
+
+            {/* {moment().format('YYYY-MM-DD') >= moment('2024-07-10').format('YYYY-MM-DD') && (
                 <>
+                    <Drawer.Screen
+                        name="Euro 2024"
+                        component={EuroNavigator}
+                        options={{
+                            headerShown: false,
+                            drawerIcon: ({color}) => (
+                                <Ionicons name="football" size={24} color={color} />
+                            ),
+                            headerTitle: () => <></>,
+                            headerStyle: { backgroundColor: '#333333', height: 60 },
+                        }}
+                    />
+
+                    <Drawer.Screen
+                        name="Ligue 1"
+                        component={FootballNavigator}
+                        options={{
+                            headerShown: false,
+                            drawerIcon: ({color}) => (
+                                <Ionicons name="football" size={24} color={color} />
+                            ),
+                            headerTitle: () => <></>,
+                            headerStyle: { backgroundColor: '#333333', height: 60 },
+                        }}
+                    />
                     <Drawer.Screen
                         name="Premier League"
                         component={PremierLeagueNavigator}
@@ -166,7 +231,7 @@ const HomeScreen = ({ navigation, route }) => {
                         }}
                     />
                 </>
-            )}
+            )} */}
 
 
             <Drawer.Screen
