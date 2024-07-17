@@ -127,7 +127,7 @@ const HomeScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <Drawer.Screen
+            {/* <Drawer.Screen
                 name="Euro 2024"
                 component={EuroNavigator}
                 options={{
@@ -138,7 +138,7 @@ const HomeScreen = ({ navigation, route }) => {
                     headerTitle: () => <></>,
                     headerStyle: { backgroundColor: '#333333', height: 60 },
                 }}
-            />
+            /> */}
 
             <Drawer.Screen
                 name="Ligue 1"
