@@ -15,7 +15,6 @@ const AllCalendarScreen = ({navigation, route}) => {
     const [listProD2, setListProD2] = useState([])
     const [listHCup, setListHCup] = useState([])
 
-    const [listEuro2024, setListEuro2024] = useState([])
     const [listLigue1, setListLigue1] = useState([])
     const [listChampionsLeague, setListChampionsLeague] = useState([])
     const [listPremiereLeague, setListPremiereLeague] = useState([])
@@ -65,17 +64,6 @@ const AllCalendarScreen = ({navigation, route}) => {
 
             data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListProD2([...data.response])
-        }).catch(err => refresh ? setIsRefreshing(false) : setIsLoading(false));
-
-        // EURO2024
-        fetch("https://v3.football.api-sports.io/fixtures?season=2024&league=4&date="+date, {"method": "GET","headers": {"x-rapidapi-host": "v3.football.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
-        .then(response => response.json())
-        .then(data => {
-            console.log('Euro2024');
-            console.log(data.response);
-
-            data.response.sort((a, b) => a.fixture.date > b.fixture.date ? 1 : -1)
-            setListEuro2024([...data.response])
         }).catch(err => refresh ? setIsRefreshing(false) : setIsLoading(false));
 
         // Ligue1
@@ -198,7 +186,7 @@ const AllCalendarScreen = ({navigation, route}) => {
             >
                 { isLoading && <ActivityIndicator style={{marginTop: 50,}}/>}
 
-                {!isLoading && listChampionsLeague.length == 0 && listEuro2024.length == 0 && listFormule1.length == 0 && listHCup.length == 0 && listLigue1.length == 0 && listNBA.length == 0 && listPremiereLeague.length == 0 && listProD2.length == 0 && listTop14.length == 0 && (
+                {!isLoading && listChampionsLeague.length == 0 && listFormule1.length == 0 && listHCup.length == 0 && listLigue1.length == 0 && listNBA.length == 0 && listPremiereLeague.length == 0 && listProD2.length == 0 && listTop14.length == 0 && (
                     <View style={{marginTop: 10,}}>
                         <Text style={{textAlign: 'center',}}>
                             {isFrench ? 'Aucun évènement aujourd\'hui' : 'No events today'}
@@ -492,126 +480,6 @@ const AllCalendarScreen = ({navigation, route}) => {
                     </>
                 )}
 
-
-                {/* Euro2024 */}
-                {!isLoading && listEuro2024.length > 0 && (
-                    <>
-                        <View 
-                            style={[
-                                styles.elevate, 
-                                {
-                                    height: 40,
-                                    flexDirection:'row',
-                                    justifyContent:'center',
-                                    alignItems:'center',
-                                    alignSelf:'center',
-                                    gap: 5,
-                                    backgroundColor: '#d9d9d9',
-                                    borderWidth:1,
-                                    borderColor:'#808080',
-                                    marginVertical: 10,
-                                    paddingHorizontal: 20,
-                                    borderRadius: 10,
-                                }
-                            ]}
-                        >
-                            <Image
-                                style={{width: 30, height: 30, borderRadius: 3,}}
-                                resizeMode='contain'
-                                source={{uri: listEuro2024[0].league.logo}}
-                            />
-                            <Text style={{fontSize: 15,fontWeight: 'bold',}}>Euro 2024 - {listEuro2024[0].league.round}</Text>
-                        </View>
-
-                        {listEuro2024.map(e => {
-                            return(
-                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.fixture.status.long !== 'Not Started' ? 0 : 8}}>
-                                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
-                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
-                                            <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
-                                            <Image
-                                                style={{width: 30, height: 30}}
-                                                resizeMode='contain'
-                                                source={{uri: e.teams.home.logo}}
-                                            />
-                                        </View>
-
-                                        {e.fixture.status.long == 'Match Finished' && e.fixture.status.short !== 'PEN' ? (
-                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'flex-start',gap: 3, width: '10%'}}>
-                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                                </View>
-                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                                </View>
-                                            </View>
-                                        ) : e.fixture.status.long == 'Not Started' ? (
-                                            <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
-                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.fixture.date).format('HH:mm')}</Text>
-                                            </View>
-                                        ) : e.fixture.status.long == 'Match Finished' && e.fixture.status.short == 'PEN' ? (
-                                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
-                                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'flex-start',gap: 3, width: '10%'}}>
-                                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                                    </View>
-                                                    <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                                    </View>
-                                                </View>
-                                                <Text style={{fontSize: 12,color:'#a8a8a8'}}>
-                                                    {isFrench ? 'Tir au but' : 'Penalty'} : {e.score.penalty.home} - {e.score.penalty.away}
-                                                </Text>
-                                            </View>
-                                        ) : e.fixture.status.short == 'PEN' ? (
-                                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center',}}>
-                                                <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                        <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                                    </View>
-                                                    <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                        <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                                    </View>
-                                                </View>
-                                                <Text style={{fontSize: 12,color:'#a8a8a8'}}>
-                                                    {isFrench ? 'Tir au but' : 'Penalty'} : {e.score.penalty.home} - {e.score.penalty.away}
-                                                </Text>
-                                            </View>
-                                        ) : (
-                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
-                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.goals.home}</Text>
-                                                </View>
-                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
-                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.goals.away}</Text>
-                                                </View>
-                                            </View>
-                                        )}
-
-                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
-                                            <Image
-                                                style={{width: 30, height: 30}}
-                                                resizeMode='contain'
-                                                source={{uri: e.teams.away.logo}}
-                                            />
-                                            <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
-                                        </View>
-                                    </View>
-
-                                    {e.fixture.status.long !== 'Not Started' && (
-                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.fixture.date).format('HH:mm')}</Text>
-                                    )}
-
-                                    {e.fixture.status.long == 'Not Started' && (
-                                        <Text style={{fontSize: 12,color:'#a8a8a8', textAlign: 'center',}}>
-                                            {e.fixture.venue.name} - {e.fixture.venue.city}
-                                        </Text>
-                                    )}
-                                </View>
-                            )
-                        })}
-                    </>
-                )}
 
                 {/* Ligue 1 */}
                 {!isLoading && listLigue1.length > 0 && (
