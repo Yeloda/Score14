@@ -14,14 +14,13 @@ const AllCalendarScreen = ({navigation, route}) => {
     const [listTop14, setListTop14] = useState([])
     const [listProD2, setListProD2] = useState([])
     const [listHCup, setListHCup] = useState([])
-
     const [listLigue1, setListLigue1] = useState([])
     const [listChampionsLeague, setListChampionsLeague] = useState([])
     const [listPremiereLeague, setListPremiereLeague] = useState([])
-
     const [listNBA, setListNBA] = useState([])
-
     const [listFormule1, setListFormule1] = useState([])
+    const [listRugbyInter, setListRugbyInter] = useState([])
+    
 
     const [isLoading, setIsLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -64,6 +63,14 @@ const AllCalendarScreen = ({navigation, route}) => {
 
             data.response.sort((a, b) => a.date > b.date ? 1 : -1)
             setListProD2([...data.response])
+        }).catch(err => refresh ? setIsRefreshing(false) : setIsLoading(false));
+
+        // rugby international
+        fetch("https://v1.rugby.api-sports.io/games?season=2024&league=84&date="+date, {"method": "GET","headers": {"x-rapidapi-host": "v1.rugby.api-sports.io","x-rapidapi-key": process.env.API_KEY}})
+        .then(response => response.json())
+        .then(data => {
+            data.response.sort((a, b) => a.date > b.date ? 1 : -1)
+            setListRugbyInter([...data.response])
         }).catch(err => refresh ? setIsRefreshing(false) : setIsLoading(false));
 
         // Ligue1
@@ -186,7 +193,7 @@ const AllCalendarScreen = ({navigation, route}) => {
             >
                 { isLoading && <ActivityIndicator style={{marginTop: 50,}}/>}
 
-                {!isLoading && listChampionsLeague.length == 0 && listFormule1.length == 0 && listHCup.length == 0 && listLigue1.length == 0 && listNBA.length == 0 && listPremiereLeague.length == 0 && listProD2.length == 0 && listTop14.length == 0 && (
+                {!isLoading && listRugbyInter.length == 0 && listChampionsLeague.length == 0 && listFormule1.length == 0 && listHCup.length == 0 && listLigue1.length == 0 && listNBA.length == 0 && listPremiereLeague.length == 0 && listProD2.length == 0 && listTop14.length == 0 && (
                     <View style={{marginTop: 10,}}>
                         <Text style={{textAlign: 'center',}}>
                             {isFrench ? 'Aucun évènement aujourd\'hui' : 'No events today'}
@@ -424,6 +431,92 @@ const AllCalendarScreen = ({navigation, route}) => {
                             </Text>
                         </View>
                         {listProD2.map(e => {
+                            return(
+                                <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
+                                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>
+                                        <View style={{flexDirection:'row',alignItems:'center',width: '40%',gap: 5,marginRight: 25,justifyContent:'flex-end',}}>
+                                            <Text style={{fontWeight: 'bold',textAlign: 'right',}}>{e.teams.home.name.replace(' ', "\n")}</Text>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.home.logo}}
+                                            />
+                                        </View>
+
+                                        {e.status.long == 'Finished' ? (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: 'black',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        ) : e.status.long == 'Not Started' ? (
+                                            <View style={{backgroundColor: '#E6E6E6',justifyContent:'center',alignItems:'center',width: '18%',marginHorizontal: -20, height: 40}}>
+                                                <Text style={{fontSize: 14,fontWeight: 'bold',}}>{moment(e.date).format('HH:mm')}</Text>
+                                            </View>
+                                        ) : (
+                                            <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap: 3, width: '10%'}}>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white', fontWeight: 'bold',fontSize: 13,}}>{e.scores.home}</Text>
+                                                </View>
+                                                <View style={{backgroundColor: '#E20054',width: 35, height: 50,justifyContent:'center',alignItems:'center',}}>
+                                                    <Text style={{color:'white',fontWeight: 'bold',fontSize: 13,}}>{e.scores.away}</Text>
+                                                </View>
+                                            </View>
+                                        )}
+
+                                        <View style={{flexDirection:'row',alignItems:'center',width:'40%',gap: 5, marginLeft: 25}}>
+                                            <Image
+                                                style={{width: 30, height: 30}}
+                                                resizeMode='contain'
+                                                source={{uri: e.teams.away.logo}}
+                                            />
+                                            <Text style={{fontWeight: 'bold',textAlign: 'left',}}>{e.teams.away.name.replace(' ', "\n")}</Text>
+                                        </View>
+                                    </View>
+
+                                    {e.status.long !== 'Not Started' && (
+                                        <Text style={{fontSize: 12,textAlign: 'center',color:'#a8a8a8'}}>{moment(e.date).format('HH:mm')}</Text>
+                                    )}
+                                    
+                                </View>
+                            )
+                        })}
+                    </>
+                )}
+
+                {/* Rugby Inter */}
+                {!isLoading && listRugbyInter.length > 0 && (
+                    <>
+                        <View 
+                            style={[
+                                styles.elevate, 
+                                {
+                                    height: 40,
+                                    flexDirection:'row',
+                                    justifyContent:'center',
+                                    alignItems:'center',
+                                    alignSelf:'center',
+                                    gap: 5,
+                                    backgroundColor: '#d9d9d9',
+                                    borderWidth:1,
+                                    borderColor:'#808080',
+                                    marginVertical: 10,
+                                    paddingHorizontal: 20,
+                                    borderRadius: 10,
+                                }
+                            ]}
+                        >
+                            <Image
+                                style={{width: 30, height: 30, borderRadius: 3,}}
+                                resizeMode='contain'
+                                source={{uri: listRugbyInter[0].league.logo}}
+                            />
+                            <Text style={{fontSize: 15,fontWeight: 'bold',}}>{isFrench ? 'Rugby International' : 'International Rugby'}</Text>
+                        </View>
+                        {listRugbyInter.map(e => {
                             return(
                                 <View key={Math.random()} style={{backgroundColor: 'white',marginBottom: 6,paddingTop: 8, paddingBottom: e.status.long !== 'Not Started' ? 0 : 8}}>
                                     <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',width:'100%', backgroundColor: 'white',}}>

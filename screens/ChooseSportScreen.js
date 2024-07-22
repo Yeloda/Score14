@@ -94,48 +94,63 @@ const ChooseSportScreen = ({navigation, route}) => {
                 </View>
 
 
+                {Platform.OS !== 'ios' && moment().format('YYYY-MM-DD') > moment('2024-07-25').format('YYYY-MM-DD') && (
+                    <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate('Ligue 1')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto'}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/football/leagues/61.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Ligue 1</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate('Premier League')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto'}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Premier League</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
-                {/* 3eme ligne */}
-                <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('Ligue 1')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto'}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/61.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Ligue 1</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate('Premier League')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto'}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/39.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>Premier League</Text>
-                    </TouchableOpacity>
-                </View>
 
                 {/* 4eme ligne */}
                 <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto',}}
-                            resizeMode='contain'
-                            source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
-                            {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
-                        </Text>
-                    </TouchableOpacity>
+                    {Platform.OS !== 'ios' && moment().format('YYYY-MM-DD') > moment('2024-07-25').format('YYYY-MM-DD') ? (
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate(isFrench ? 'Ligue des Champions' : 'Champion\'s League')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto',}}
+                                resizeMode='contain'
+                                source={{uri: "https://media.api-sports.io/football/leagues/2.png"}}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>
+                                {isFrench ? 'Ligue des Champions' : 'Champion\'s League'}
+                            </Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate(isFrench ? 'Formule 1' : 'Formula 1')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto',}}
+                                resizeMode='contain'
+                                source={require('../assets/F1-logo.png')}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Formule 1' : ' Formula 1'}</Text>
+                        </TouchableOpacity>
+                    )}
                     <TouchableOpacity 
                         style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
                         onPress={() => navigation.navigate('NBA')}
@@ -156,22 +171,21 @@ const ChooseSportScreen = ({navigation, route}) => {
 
 
 
-
-
-                {/* 5eme ligne */}
-                <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
-                    <TouchableOpacity 
-                        style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
-                        onPress={() => navigation.navigate(isFrench ? 'Formule 1' : 'Formula 1')}
-                    >
-                        <Image
-                            style={{height: 50,width:'auto',}}
-                            resizeMode='contain'
-                            source={require('../assets/F1-logo.png')}
-                        />
-                        <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Formule 1' : ' Formula 1'}</Text>
-                    </TouchableOpacity>
-                </View>
+                {Platform.OS !== 'ios' && moment().format('YYYY-MM-DD') > moment('2024-07-25').format('YYYY-MM-DD') && (
+                    <View style={{flexDirection:'row',justifyContent:'center',gap: 15,alignItems:'center',marginTop: 10,}}>
+                        <TouchableOpacity 
+                            style={{width:'40%', padding: 20,borderRadius: 15,backgroundColor: 'white',height: 150,justifyContent:'center',}}
+                            onPress={() => navigation.navigate(isFrench ? 'Formule 1' : 'Formula 1')}
+                        >
+                            <Image
+                                style={{height: 50,width:'auto',}}
+                                resizeMode='contain'
+                                source={require('../assets/F1-logo.png')}
+                            />
+                            <Text style={{textAlign: 'center',marginTop: 10,fontWeight: 'bold',fontSize: 18,}}>{isFrench ? 'Formule 1' : ' Formula 1'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 <View style={{height: 150}}/>
             </ScrollView>
